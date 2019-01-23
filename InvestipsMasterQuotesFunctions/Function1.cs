@@ -9,6 +9,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Newtonsoft.Json;
+using YahooFinanceApi;
 
 namespace InvestipsMasterQuotesFunctions
 {
@@ -17,6 +18,14 @@ namespace InvestipsMasterQuotesFunctions
         [FunctionName("Function1")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
+
+            var history = await Yahoo.GetHistoricalAsync("AAPL", new DateTime(2019, 1, 1), DateTime.Now, Period.Daily);
+
+            foreach (var candle in history)
+            {
+                Console.WriteLine($"DateTime: {candle.DateTime}, Open: {candle.Open}, High: {candle.High}, Low: {candle.Low}, Close: {candle.Close}, Volume: {candle.Volume}, AdjustedClose: {candle.AdjustedClose}");
+            }
+
             log.Info("C# HTTP trigger function processed a request.");
             HttpClient _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://enigmatic-waters-56889.herokuapp.com/");
