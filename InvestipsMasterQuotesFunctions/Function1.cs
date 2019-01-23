@@ -4,11 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using InvestipsMasterQuotesFunctions.DTO;
 using InvestipsMasterQuotesFunctions.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Newtonsoft.Json;
+using TicTacTec.TA.Library;
 using YahooFinanceApi;
 
 namespace InvestipsMasterQuotesFunctions
@@ -19,8 +21,9 @@ namespace InvestipsMasterQuotesFunctions
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
 
-            var history = await Yahoo.GetHistoricalAsync("AAPL", new DateTime(2019, 1, 1), DateTime.Now, Period.Daily);
+            var history = await Yahoo.GetHistoricalAsync("AAPL", new DateTime(2018,12, 1), DateTime.Now, Period.Daily);
 
+            var mvAvgs10Info = GetMovingAveragesByPeriod(history, 10);
             foreach (var candle in history)
             {
                 Console.WriteLine($"DateTime: {candle.DateTime}, Open: {candle.Open}, High: {candle.High}, Low: {candle.Low}, Close: {candle.Close}, Volume: {candle.Volume}, AdjustedClose: {candle.AdjustedClose}");
@@ -58,6 +61,31 @@ namespace InvestipsMasterQuotesFunctions
             return name == null
                 ? req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a name on the query string or in the request body")
                 : req.CreateResponse(HttpStatusCode.OK, "Hello " + name);
+        }
+
+        public static MovingAvgInfo GetMovingAveragesByPeriod(IEnumerable<Candle> historicalQuotes, int period)
+        {
+            int outBegIndex = 0;
+            int outNbElement = 0;
+            var closePrices = historicalQuotes.Select(x => Convert.ToSingle(x.Close)).ToArray();
+            var outMovingAverages = new double[closePrices.Length];
+
+            var resultState = TicTacTec.TA.Library.Core.MovingAverage(
+                0,
+                closePrices.Length - 1,
+                closePrices, period,
+                Core.MAType.Ema,
+                out outBegIndex,
+                out outNbElement,
+                outMovingAverages);
+
+            return new MovingAvgInfo
+            {
+                StartIndex = outBegIndex,
+                EndIndex = outNbElement,
+                MovingAverages = outMovingAverages,
+                Period = period
+            };
         }
     }
 }
