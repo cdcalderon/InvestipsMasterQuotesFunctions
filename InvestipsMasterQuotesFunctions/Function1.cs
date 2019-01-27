@@ -32,7 +32,7 @@ namespace InvestipsMasterQuotesFunctions
             {
                 var history = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2018, 12, 1), DateTime.Now, Period.Daily);
                 quoteMaker.BuildQuote(history);
-                var quote = quoteMaker.GetQuote();
+                var quote = quoteMaker.GetQuotes();
             }
             
             var quoteService = new QuoteService();
@@ -83,7 +83,8 @@ namespace InvestipsMasterQuotesFunctions
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             var symbols = JsonConvert.DeserializeObject<IEnumerable<string>>(content);
-            return symbols;
+           // return symbols;
+            return new List<string>(){"AAPL"};
         }
 
         public static MovingAvgInfo GetMovingAveragesByPeriod(IEnumerable<Candle> historicalQuotes, int period)

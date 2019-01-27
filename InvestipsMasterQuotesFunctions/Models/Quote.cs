@@ -24,5 +24,9 @@ namespace InvestipsMasterQuotesFunctions.Models
         public decimal Open { get; set; }
 
         public DateTime TimeStampDateTime { get; set; }
+
+        public double MovingAvg7 { get; set; }
+        public double MovingAvg10 { get; set; }
+        public double MovingAvg30 { get; set; }
     }
 }

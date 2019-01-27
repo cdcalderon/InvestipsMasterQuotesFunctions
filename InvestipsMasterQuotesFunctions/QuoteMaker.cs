@@ -27,9 +27,9 @@ namespace InvestipsMasterQuotesFunctions
             builder.ApplySignals();
         }
 
-        public Quote GetQuote()
+        public IList<Quote> GetQuotes()
         {
-            return builder.GetQuote();
+            return builder.GetQuotes();
         }
     }
 }

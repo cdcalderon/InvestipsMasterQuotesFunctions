@@ -10,16 +10,16 @@ namespace InvestipsMasterQuotesFunctions
 {
     public abstract class QuoteBuilder
     {
-        protected Quote Quote;
+        protected IList<Quote> Quotes;
         protected IEnumerable<Candle> QuoteCandles;
-        public Quote GetQuote()
+        public IList<Quote> GetQuotes()
         {
-            return Quote;
+            return Quotes;
         }
 
         public void CreateNewQuote(IEnumerable<Candle> quoteCandles)
         {
-            Quote = new Quote();
+            this.Quotes = new List<Quote>();
             this.QuoteCandles = quoteCandles;
         }
 
