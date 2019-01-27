@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CsvHelper;
+using FinanceQuoteService;
 using InvestipsMasterQuotesFunctions.DTO;
 using InvestipsMasterQuotesFunctions.Models;
 using Microsoft.Azure.WebJobs;
@@ -20,24 +22,33 @@ namespace InvestipsMasterQuotesFunctions
         [FunctionName("Function1")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
+            var quoteMaker = new QuoteMaker(new InvestipsQuoteBuilder());
 
-            var history = await Yahoo.GetHistoricalAsync("AAPL", new DateTime(2018,12, 1), DateTime.Now, Period.Daily);
+            var httpClient = GetHttpClient();
 
-            var mvAvgs10Info = GetMovingAveragesByPeriod(history, 10);
-            foreach (var candle in history)
+            var symbols = await GetStockSymbols(httpClient);
+
+            foreach (var symbol in symbols)
             {
-                Console.WriteLine($"DateTime: {candle.DateTime}, Open: {candle.Open}, High: {candle.High}, Low: {candle.Low}, Close: {candle.Close}, Volume: {candle.Volume}, AdjustedClose: {candle.AdjustedClose}");
+                var history = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2018, 12, 1), DateTime.Now, Period.Daily);
+                
+                foreach (var candle in history)
+                {
+                    //Console.WriteLine($"DateTime: {candle.DateTime}, Open: {candle.Open}, High: {candle.High}, Low: {candle.Low}, Close: {candle.Close}, Volume: {candle.Volume}, AdjustedClose: {candle.AdjustedClose}");
+                    quoteMaker.BuildQuote(candle);
+                    var quote = quoteMaker.GetQuote();
+                }
             }
+            
+            var quoteService = new QuoteService();
+            var historyQuotes = await quoteService.GetHistoricalQuotes();
+
+            
+
+            var mvAvgs10Info = GetMovingAveragesByPeriod(historyQuotes, 10);
 
             log.Info("C# HTTP trigger function processed a request.");
-            HttpClient _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://enigmatic-waters-56889.herokuapp.com/");
-            _httpClient.Timeout = new TimeSpan(0,0,45);
-
-            var response = await _httpClient.GetAsync("api/udf/allsymbols");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            var symbols = JsonConvert.DeserializeObject<IEnumerable<string>>(content);
+            
 
             // parse query parameter
             string name = req.GetQueryNameValuePairs()
@@ -61,6 +72,23 @@ namespace InvestipsMasterQuotesFunctions
             return name == null
                 ? req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a name on the query string or in the request body")
                 : req.CreateResponse(HttpStatusCode.OK, "Hello " + name);
+        }
+
+        private static HttpClient GetHttpClient()
+        {
+            HttpClient _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri("https://enigmatic-waters-56889.herokuapp.com/");
+            _httpClient.Timeout = new TimeSpan(0, 0, 45);
+            return _httpClient;
+        }
+
+        private static async Task<IEnumerable<string>> GetStockSymbols(HttpClient _httpClient)
+        {
+            var response = await _httpClient.GetAsync("api/udf/allsymbols");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            var symbols = JsonConvert.DeserializeObject<IEnumerable<string>>(content);
+            return symbols;
         }
 
         public static MovingAvgInfo GetMovingAveragesByPeriod(IEnumerable<Candle> historicalQuotes, int period)

@@ -11,6 +11,9 @@
     <PackageReference Include="YahooFinanceApi" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FinanceQuoteService\FinanceQuoteService.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
