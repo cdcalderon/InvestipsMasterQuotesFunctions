@@ -12,7 +12,8 @@ namespace InvestipsMasterQuotesFunctions
     {
         public override void ApplyCandleBarQuote()
         {
-            this.Quote.Open = this.QuoteCandle.Open;
+            var lastQuote = this.QuoteCandles.First();
+            this.Quote.Open = lastQuote.Open;
         }
 
         public override void ApplyMovingAverages()

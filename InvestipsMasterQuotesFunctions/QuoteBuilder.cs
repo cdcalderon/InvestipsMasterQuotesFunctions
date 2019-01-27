@@ -11,16 +11,16 @@ namespace InvestipsMasterQuotesFunctions
     public abstract class QuoteBuilder
     {
         protected Quote Quote;
-        protected Candle QuoteCandle;
+        protected IEnumerable<Candle> QuoteCandles;
         public Quote GetQuote()
         {
             return Quote;
         }
 
-        public void CreateNewQuote(Candle quoteCandle)
+        public void CreateNewQuote(IEnumerable<Candle> quoteCandles)
         {
             Quote = new Quote();
-            this.QuoteCandle = quoteCandle;
+            this.QuoteCandles = quoteCandles;
         }
 
         public abstract void ApplyCandleBarQuote();

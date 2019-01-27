@@ -17,9 +17,9 @@ namespace InvestipsMasterQuotesFunctions
             this.builder = builder;
         }
 
-        public void BuildQuote(Candle candleQuote)
+        public void BuildQuote(IEnumerable<Candle> candleQuotes)
         {
-            builder.CreateNewQuote(candleQuote);
+            builder.CreateNewQuote(candleQuotes);
             builder.ApplyCandleBarQuote();
             builder.ApplyMovingAverages();
             builder.ApplyStochatics();

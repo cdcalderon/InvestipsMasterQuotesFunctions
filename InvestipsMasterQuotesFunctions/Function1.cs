@@ -31,13 +31,8 @@ namespace InvestipsMasterQuotesFunctions
             foreach (var symbol in symbols)
             {
                 var history = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2018, 12, 1), DateTime.Now, Period.Daily);
-                
-                foreach (var candle in history)
-                {
-                    //Console.WriteLine($"DateTime: {candle.DateTime}, Open: {candle.Open}, High: {candle.High}, Low: {candle.Low}, Close: {candle.Close}, Volume: {candle.Volume}, AdjustedClose: {candle.AdjustedClose}");
-                    quoteMaker.BuildQuote(candle);
-                    var quote = quoteMaker.GetQuote();
-                }
+                quoteMaker.BuildQuote(history);
+                var quote = quoteMaker.GetQuote();
             }
             
             var quoteService = new QuoteService();
