@@ -28,5 +28,7 @@ namespace InvestipsMasterQuotesFunctions.Models
         public double MovingAvg7 { get; set; }
         public double MovingAvg10 { get; set; }
         public double MovingAvg30 { get; set; }
+        public double Macd8179 { get; set; }
+        public double Stochastics14505 { get; set; }
     }
 }

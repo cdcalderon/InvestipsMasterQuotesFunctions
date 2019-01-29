@@ -63,23 +63,56 @@ namespace InvestipsMasterQuotesFunctions
 
         public override void ApplyMacds()
         {
-            Console.WriteLine("ApplyMacds()");
+            int outBegIndex = 0;
+            int outNbElement = 0;
+            var closePrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Close)).ToArray();
+            var outMacds = new double[closePrices.Length];
+            var outMacdSignals = new double[closePrices.Length];
+            var outMacdHis = new double[closePrices.Length];
+
+            var resultState = TicTacTec.TA.Library.Core.Macd(0, closePrices.Length - 1, closePrices,
+                8, 17, 9, out outBegIndex, out outNbElement, outMacds, outMacdSignals, outMacdHis);
+
+            var macd = new MacdInfo
+            {
+                StartIndex = outBegIndex,
+                EndIndex = outNbElement,
+                Macds = outMacdHis
+            };
+
+            MergeMacd(macd);
         }
 
         public override void ApplyStochatics()
         {
-            Console.WriteLine("ApplyStochatics()");
+            int outBegIndex = 0;
+            int outNbElement = 0;
+            var closePrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Close)).ToArray();
+            var highPrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.High)).ToArray();
+            var lowPrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Low)).ToArray();
+            var slowKs = new double[closePrices.Length];
+            var slowDs = new double[closePrices.Length];
+
+            var resultState = TicTacTec.TA.Library.Core.Stoch(0, closePrices.Length - 1, highPrices,
+                lowPrices, closePrices, 14, 5, 0, 5, Core.MAType.Ema, out outBegIndex, out outNbElement, slowKs, slowDs);
+
+            var stochastics =  new StochasticsInfo
+            {
+                StartIndex = outBegIndex,
+                EndIndex = outNbElement,
+                StochasticsSlowsK = slowKs
+            };
+
+            MergeStochastics(stochastics);
         }
 
         public override void ApplySignals()
         {
             Console.WriteLine("ApplySignals()");
         }
-
-
+        
         private void MergeMvgAvg(MovingAvgInfo movingAvgInfo)
         {
-            var idx = movingAvgInfo.EndIndex;
             for (int i = 0; i < movingAvgInfo.EndIndex; i++)
             {
                 switch (movingAvgInfo.Period)
@@ -94,8 +127,22 @@ namespace InvestipsMasterQuotesFunctions
                         this.Quotes[movingAvgInfo.StartIndex + i].MovingAvg30 = movingAvgInfo.MovingAverages[i];
                         break;
                 }
+            }
+        }
 
-                idx++;
+        private void MergeMacd(MacdInfo macdInfo)
+        {
+            for (int i = 0; i < macdInfo.EndIndex; i++)
+            {
+                this.Quotes[macdInfo.StartIndex + i].Macd8179 = macdInfo.Macds[i];
+            }
+        }
+
+        private void MergeStochastics(StochasticsInfo stochasticsInfo)
+        {
+            for (int i = 0; i < stochasticsInfo.EndIndex; i++)
+            {
+                this.Quotes[stochasticsInfo.StartIndex + i].Stochastics14505 = stochasticsInfo.StochasticsSlowsK[i];
             }
         }
     }
