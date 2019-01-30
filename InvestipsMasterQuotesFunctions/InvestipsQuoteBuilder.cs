@@ -108,9 +108,50 @@ namespace InvestipsMasterQuotesFunctions
 
         public override void ApplySignals()
         {
-            Console.WriteLine("ApplySignals()");
+            ApplyBullStoch307Signal();
+            ApplyBearStoch307Signal();
+            ApplyBullThreeArrowSignal();
+            ApplyBearThreeArrowSignal();
+            ApplyBullBigEightSignal();
+            ApplyBearBigEightSignal();
+            ApplySuperGapSignal();
         }
-        
+
+        private void ApplyBullStoch307Signal()
+        {
+            
+        }
+
+        private void ApplyBearStoch307Signal()
+        {
+
+        }
+
+        private void ApplyBullThreeArrowSignal()
+        {
+
+        }
+
+        private void ApplyBearThreeArrowSignal()
+        {
+
+        }
+
+        private void ApplySuperGapSignal()
+        {
+
+        }
+
+        private void ApplyBearBigEightSignal()
+        {
+
+        }
+
+        private void ApplyBullBigEightSignal()
+        {
+
+        }
+
         private void MergeMvgAvg(MovingAvgInfo movingAvgInfo)
         {
             for (int i = 0; i < movingAvgInfo.EndIndex; i++)
