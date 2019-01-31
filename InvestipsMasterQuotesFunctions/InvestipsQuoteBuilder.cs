@@ -66,7 +66,7 @@ namespace InvestipsMasterQuotesFunctions
             var outMacdSignals = new double[closePrices.Length];
             var outMacdHis = new double[closePrices.Length];
 
-            var resultState = TicTacTec.TA.Library.Core.Macd(0, closePrices.Length - 1, closePrices,
+            TicTacTec.TA.Library.Core.Macd(0, closePrices.Length - 1, closePrices,
                 8, 17, 9, out var outBegIndex, out var outNbElement, outMacds, outMacdSignals, outMacdHis);
 
             var macd = new MacdInfo
@@ -87,7 +87,7 @@ namespace InvestipsMasterQuotesFunctions
             var slowKs = new double[closePrices.Length];
             var slowDs = new double[closePrices.Length];
 
-            var resultState = TicTacTec.TA.Library.Core.Stoch(0, closePrices.Length - 1, highPrices,
+            TicTacTec.TA.Library.Core.Stoch(0, closePrices.Length - 1, highPrices,
                 lowPrices, closePrices, 14, 5, 0, 5, Core.MAType.Ema, out var outBegIndex, out var outNbElement, slowKs, slowDs);
 
             var stochastics =  new StochasticsInfo
