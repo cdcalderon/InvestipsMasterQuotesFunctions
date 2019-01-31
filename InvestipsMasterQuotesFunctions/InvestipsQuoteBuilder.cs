@@ -35,8 +35,6 @@ namespace InvestipsMasterQuotesFunctions
 
             foreach (var period in periods)
             {
-                int outBegIndex = 0;
-                int outNbElement = 0;
                 var closePrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Close)).ToArray();
                 var outMovingAverages = new double[closePrices.Length];
 
@@ -45,8 +43,8 @@ namespace InvestipsMasterQuotesFunctions
                     closePrices.Length - 1,
                     closePrices, period,
                     Core.MAType.Ema,
-                    out outBegIndex,
-                    out outNbElement,
+                    out var outBegIndex,
+                    out var outNbElement,
                     outMovingAverages);
 
                 var mvgAvg = new MovingAvgInfo
@@ -63,15 +61,13 @@ namespace InvestipsMasterQuotesFunctions
 
         public override void ApplyMacds()
         {
-            int outBegIndex = 0;
-            int outNbElement = 0;
             var closePrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Close)).ToArray();
             var outMacds = new double[closePrices.Length];
             var outMacdSignals = new double[closePrices.Length];
             var outMacdHis = new double[closePrices.Length];
 
             var resultState = TicTacTec.TA.Library.Core.Macd(0, closePrices.Length - 1, closePrices,
-                8, 17, 9, out outBegIndex, out outNbElement, outMacds, outMacdSignals, outMacdHis);
+                8, 17, 9, out var outBegIndex, out var outNbElement, outMacds, outMacdSignals, outMacdHis);
 
             var macd = new MacdInfo
             {
@@ -85,8 +81,6 @@ namespace InvestipsMasterQuotesFunctions
 
         public override void ApplyStochatics()
         {
-            int outBegIndex = 0;
-            int outNbElement = 0;
             var closePrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Close)).ToArray();
             var highPrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.High)).ToArray();
             var lowPrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Low)).ToArray();
@@ -94,7 +88,7 @@ namespace InvestipsMasterQuotesFunctions
             var slowDs = new double[closePrices.Length];
 
             var resultState = TicTacTec.TA.Library.Core.Stoch(0, closePrices.Length - 1, highPrices,
-                lowPrices, closePrices, 14, 5, 0, 5, Core.MAType.Ema, out outBegIndex, out outNbElement, slowKs, slowDs);
+                lowPrices, closePrices, 14, 5, 0, 5, Core.MAType.Ema, out var outBegIndex, out var outNbElement, slowKs, slowDs);
 
             var stochastics =  new StochasticsInfo
             {
