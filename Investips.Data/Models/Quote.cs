@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace InvestipsMasterQuotesFunctions.Models
+namespace Investips.Data.Models
 {
     [Table("Quote", Schema = "Stock")]
     public class Quote
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         public string Symbol { get; set; }
@@ -30,5 +27,9 @@ namespace InvestipsMasterQuotesFunctions.Models
         public decimal MovingAvg30 { get; set; }
         public decimal Macd8179 { get; set; }
         public decimal Stochastics14505 { get; set; }
+
+        public bool IsPriceCrossMovAvg30Up { get; set; }
+        public bool IsStochCossing25Up { get; set; }
+        public bool IsMacdCrossingHorizontalUp { get; set; }
     }
 }

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FinanceQuoteService;
+using Investips.Data.Models;
 using InvestipsMasterQuotesFunctions.DTO;
-using InvestipsMasterQuotesFunctions.Models;
 using TicTacTec.TA.Library;
 using YahooFinanceApi;
 
@@ -113,6 +113,8 @@ namespace InvestipsMasterQuotesFunctions
 
         public override void ApplyPriceCrossingUpMovingAverages()
         {
+            // define a small tolerance on our checks to avoid bouncing
+            const decimal tolerance = 0.00015m;
             for (var i = 1; i < this.Quotes.Count; i++)
             {
                 var previousQuote = this.Quotes[i - 1];
@@ -122,9 +124,41 @@ namespace InvestipsMasterQuotesFunctions
                 var currentClose = currentQuote.Close;
                 var currentMovingAvg = currentQuote.MovingAvg30;
 
-                if (currentClose > currentMovingAvg)
+                if (currentClose > currentMovingAvg && previousClose < previousMovAvg30)
                 {
+                    this.Quotes[i].IsPriceCrossMovAvg30Up = true;
+                }
+            }
+        }
 
+        public override void ApplyStochasticCrossingUp25()
+        {
+            for (var i = 1; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var previousStoch14505 = previousQuote.Stochastics14505;
+                var currentStoch14505 = currentQuote.Stochastics14505;
+
+                if (currentStoch14505 > 25 && previousStoch14505 < 25)
+                {
+                    this.Quotes[i].IsStochCossing25Up = true;
+                }
+            }
+        }
+
+        public override void ApplyMacdCrossingHorizontalUp()
+        {
+            for (var i = 1; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var previousMacd8179 = previousQuote.Macd8179;
+                var currentMacd8179 = currentQuote.Macd8179;
+
+                if (currentMacd8179 > 0 && previousMacd8179 <= 0)
+                {
+                    this.Quotes[i].IsStochCossing25Up = true;
                 }
             }
         }

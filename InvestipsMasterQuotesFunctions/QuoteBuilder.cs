@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using InvestipsMasterQuotesFunctions.Models;
+using Investips.Data.Models;
 using YahooFinanceApi;
 
 namespace InvestipsMasterQuotesFunctions
@@ -29,6 +29,8 @@ namespace InvestipsMasterQuotesFunctions
         public abstract void ApplyStochatics();
         public abstract void ApplySignals();
         public abstract void ApplyPriceCrossingUpMovingAverages();
+        public abstract void ApplyStochasticCrossingUp25();
+        public abstract void ApplyMacdCrossingHorizontalUp();
 
     }
 }
