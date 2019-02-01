@@ -25,10 +25,10 @@ namespace InvestipsMasterQuotesFunctions.Models
 
         public DateTime TimeStampDateTime { get; set; }
 
-        public double MovingAvg7 { get; set; }
-        public double MovingAvg10 { get; set; }
-        public double MovingAvg30 { get; set; }
-        public double Macd8179 { get; set; }
-        public double Stochastics14505 { get; set; }
+        public decimal MovingAvg7 { get; set; }
+        public decimal MovingAvg10 { get; set; }
+        public decimal MovingAvg30 { get; set; }
+        public decimal Macd8179 { get; set; }
+        public decimal Stochastics14505 { get; set; }
     }
 }

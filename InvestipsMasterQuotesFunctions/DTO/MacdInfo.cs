@@ -10,6 +10,6 @@ namespace InvestipsMasterQuotesFunctions.DTO
     {
         public int StartIndex { get; set; }
         public int EndIndex { get; set; }
-        public double[] Macds { get; set; }
+        public decimal[] Macds { get; set; }
     }
 }

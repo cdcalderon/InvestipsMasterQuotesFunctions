@@ -107,7 +107,7 @@ namespace InvestipsMasterQuotesFunctions
             {
                 StartIndex = outBegIndex,
                 EndIndex = outNbElement,
-                MovingAverages = outMovingAverages,
+                MovingAverages = outMovingAverages.Select(d => Convert.ToDecimal(d)).ToArray(),
                 Period = period
             };
         }

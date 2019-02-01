@@ -11,6 +11,6 @@ namespace InvestipsMasterQuotesFunctions.DTO
         public int StartIndex { get; set; }
         public int EndIndex { get; set; }
         public int Period { get; set; }
-        public double[] MovingAverages { get; set; }
+        public decimal[] MovingAverages { get; set; }
     }
 }

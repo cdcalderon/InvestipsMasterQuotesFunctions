@@ -10,6 +10,6 @@ namespace InvestipsMasterQuotesFunctions.DTO
     {
         public int StartIndex { get; set; }
         public int EndIndex { get; set; }
-        public double[] StochasticsSlowsK { get; set; }
+        public decimal[] StochasticsSlowsK { get; set; }
     }
 }

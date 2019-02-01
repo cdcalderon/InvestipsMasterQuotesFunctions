@@ -28,6 +28,7 @@ namespace InvestipsMasterQuotesFunctions
         public abstract void ApplyMacds();
         public abstract void ApplyStochatics();
         public abstract void ApplySignals();
+        public abstract void ApplyPriceCrossingUpMovingAverages();
 
     }
 }

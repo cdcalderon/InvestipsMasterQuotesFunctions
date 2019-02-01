@@ -51,7 +51,7 @@ namespace InvestipsMasterQuotesFunctions
                 {
                     StartIndex = outBegIndex,
                     EndIndex = outNbElement,
-                    MovingAverages = outMovingAverages,
+                    MovingAverages = outMovingAverages.Select(d => Convert.ToDecimal(d)).ToArray(),
                     Period = period
                 };
 
@@ -73,7 +73,7 @@ namespace InvestipsMasterQuotesFunctions
             {
                 StartIndex = outBegIndex,
                 EndIndex = outNbElement,
-                Macds = outMacdHis
+                Macds = outMacdHis.Select(d => Convert.ToDecimal(d)).ToArray()
             };
 
             MergeMacd(macd);
@@ -94,7 +94,7 @@ namespace InvestipsMasterQuotesFunctions
             {
                 StartIndex = outBegIndex,
                 EndIndex = outNbElement,
-                StochasticsSlowsK = slowKs
+                StochasticsSlowsK = slowKs.Select(d => Convert.ToDecimal(d)).ToArray()
             };
 
             MergeStochastics(stochastics);
@@ -111,6 +111,24 @@ namespace InvestipsMasterQuotesFunctions
             ApplySuperGapSignal();
         }
 
+        public override void ApplyPriceCrossingUpMovingAverages()
+        {
+            for (var i = 1; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var previousClose = previousQuote.Close;
+                var previousMovAvg30 = previousQuote.MovingAvg30;
+                var currentClose = currentQuote.Close;
+                var currentMovingAvg = currentQuote.MovingAvg30;
+
+                if (currentClose > currentMovingAvg)
+                {
+
+                }
+            }
+        }
+
         private void ApplyBullStoch307Signal()
         {
             
@@ -123,6 +141,10 @@ namespace InvestipsMasterQuotesFunctions
 
         private void ApplyBullThreeArrowSignal()
         {
+            var movAvg30Check = false;
+            var macdCheck = false;
+            var stochasticsCheck = false;
+
 
         }
 
