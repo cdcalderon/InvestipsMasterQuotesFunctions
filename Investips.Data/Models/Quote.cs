@@ -31,5 +31,7 @@ namespace Investips.Data.Models
         public bool IsPriceCrossMovAvg30Up { get; set; }
         public bool IsStochCossing25Up { get; set; }
         public bool IsMacdCrossingHorizontalUp { get; set; }
+
+        public bool IsBullThreeArrow { get; set; }
     }
 }

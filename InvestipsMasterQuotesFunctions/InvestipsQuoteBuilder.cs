@@ -159,7 +159,7 @@ namespace InvestipsMasterQuotesFunctions
 
                 if (currentMacd8179 > 0 && previousMacd8179 <= 0)
                 {
-                    this.Quotes[i].IsStochCossing25Up = true;
+                    this.Quotes[i].IsMacdCrossingHorizontalUp = true;
                 }
             }
         }
@@ -200,9 +200,12 @@ namespace InvestipsMasterQuotesFunctions
                 if (movAvg30Check && macdCheck && stochasticsCheck)
                 {
                     Debug.Write("Three arrow Signal Valid ", quote.TimeStampDateTime.ToLongDateString());
+                    quote.IsBullThreeArrow = true;
+                    movAvg30Check = false;
+                    macdCheck = false;
+                    stochasticsCheck = false;
                 }
             }
-
         }
 
         private void ApplyBearThreeArrowSignal()

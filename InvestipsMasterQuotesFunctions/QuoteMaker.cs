@@ -24,11 +24,12 @@ namespace InvestipsMasterQuotesFunctions
             builder.ApplyMovingAverages();
             builder.ApplyStochatics();
             builder.ApplyMacds();
-            builder.ApplySignals();
             builder.ApplyPriceCrossingUpMovingAverages();
             builder.ApplyStochasticCrossingUp25();
             builder.ApplyMacdCrossingHorizontalUp();
-    }
+
+            builder.ApplySignals();
+        }
 
         public IList<Quote> GetQuotes()
         {
