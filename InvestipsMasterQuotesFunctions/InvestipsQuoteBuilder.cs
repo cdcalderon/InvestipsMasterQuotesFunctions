@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -179,6 +180,28 @@ namespace InvestipsMasterQuotesFunctions
             var macdCheck = false;
             var stochasticsCheck = false;
 
+            foreach (var quote in this.Quotes)
+            {
+                if (quote.IsPriceCrossMovAvg30Up)
+                {
+                    movAvg30Check = true;
+                }
+
+                if (quote.IsMacdCrossingHorizontalUp)
+                {
+                    macdCheck = true;
+                }
+
+                if (quote.IsStochCossing25Up)
+                {
+                    stochasticsCheck = true;
+                }
+
+                if (movAvg30Check && macdCheck && stochasticsCheck)
+                {
+                    Debug.Write("Three arrow Signal Valid ", quote.TimeStampDateTime.ToLongDateString());
+                }
+            }
 
         }
 
