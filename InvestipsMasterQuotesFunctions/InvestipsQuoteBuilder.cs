@@ -80,7 +80,7 @@ namespace InvestipsMasterQuotesFunctions
             MergeMacd(macd);
         }
 
-        public override void ApplyStochatics()
+        public override void ApplyStochatics1405()
         {
             var closePrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Close)).ToArray();
             var highPrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.High)).ToArray();
@@ -98,7 +98,28 @@ namespace InvestipsMasterQuotesFunctions
                 StochasticsSlowsK = slowKs.Select(d => Convert.ToDecimal(d)).ToArray()
             };
 
-            MergeStochastics(stochastics);
+            MergeStochastics(stochastics, 14);
+        }
+
+        public override void ApplyStochatics101()
+        {
+            var closePrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Close)).ToArray();
+            var highPrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.High)).ToArray();
+            var lowPrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Low)).ToArray();
+            var slowKs = new double[closePrices.Length];
+            var slowDs = new double[closePrices.Length];
+
+            TicTacTec.TA.Library.Core.Stoch(0, closePrices.Length - 1, highPrices,
+                lowPrices, closePrices, 10, 1, 0, 1, Core.MAType.Ema, out var outBegIndex, out var outNbElement, slowKs, slowDs);
+
+            var stochastics = new StochasticsInfo
+            {
+                StartIndex = outBegIndex,
+                EndIndex = outNbElement,
+                StochasticsSlowsK = slowKs.Select(d => Convert.ToDecimal(d)).ToArray()
+            };
+
+            MergeStochastics(stochastics, 10);
         }
 
         public override void ApplySignals()
@@ -112,7 +133,7 @@ namespace InvestipsMasterQuotesFunctions
             ApplySuperGapSignal();
         }
 
-        public override void ApplyPriceCrossingUpMovingAverages()
+        public override void ApplyPriceCrossingUpMovingAverage30()
         {
             // define a small tolerance on our checks to avoid bouncing
             const decimal tolerance = 0.00015m;
@@ -132,6 +153,47 @@ namespace InvestipsMasterQuotesFunctions
             }
         }
 
+        public override void ApplyIsMovingAvg30PointingUp()
+        {
+            const decimal tolerance = 0.00015m;
+            for (var i = 30 + 3; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 3];
+                var currentQuote = this.Quotes[i];
+                var currentClose = currentQuote.Close;
+                var currentMovingAvg = currentQuote.MovingAvg30;
+                var previousClose = previousQuote.Close;
+                var previousMovAvg30 = previousQuote.MovingAvg30;
+                
+                if (currentMovingAvg > previousMovAvg30)
+                {
+                   
+                    this.Quotes[i].IsMovingAvg30PointingUp = true;
+                    Debug.WriteLine($"ApplyIsMovingAvg30PointingUp {currentQuote.TimeStampDateTime.ToShortDateString()}");
+                }
+            }
+        }
+
+        public override void ApplyPriceCrossingUpMovingAverage7()
+        {
+            // define a small tolerance on our checks to avoid bouncing
+            const decimal tolerance = 0.00015m;
+            for (var i = 7 + 1; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var previousClose = previousQuote.Close;
+                var previousMovAvg7 = previousQuote.MovingAvg7;
+                var currentClose = currentQuote.Close;
+                var currentMovingAvg7 = currentQuote.MovingAvg7;
+
+                if (currentClose > currentMovingAvg7 && previousClose < previousMovAvg7)
+                {
+                    this.Quotes[i].IsPriceCrossMovAvg7Up = true;
+                }
+            }
+        }
+
         public override void ApplyStochasticCrossingUp25()
         {
             for (var i = 1; i < this.Quotes.Count; i++)
@@ -143,7 +205,24 @@ namespace InvestipsMasterQuotesFunctions
 
                 if (currentStoch14505 > 25 && previousStoch14505 < 25)
                 {
-                    this.Quotes[i].IsStochCossing25Up = true;
+                    this.Quotes[i].IsStoch145Cossing25Up = true;
+                }
+            }
+        }
+
+        public override void ApplyStochasticCrossingUp20()
+        {
+            for (var i = 1; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var previousStoch101 = previousQuote.Stochastics101;
+                var currentStoch101 = currentQuote.Stochastics101;
+
+                if (currentStoch101 > 20 && previousStoch101 < 20)
+                {
+                    this.Quotes[i].IsStoch101Cossing20Up = true;
+                    Debug.WriteLine($"ApplyStochasticCrossingUp20 {currentQuote.TimeStampDateTime.ToShortDateString()}");
                 }
             }
         }
@@ -164,17 +243,27 @@ namespace InvestipsMasterQuotesFunctions
             }
         }
 
-        private void ApplyBullStoch307Signal()
+        public void ApplyBullStoch307Signal()
         {
-            
+            foreach (var quote in this.Quotes)
+            {
+                if (quote.IsPriceCrossMovAvg7Up &&
+                    quote.IsStoch101Cossing20Up &&
+                    quote.IsMovingAvg30PointingUp
+                )
+                {
+                    Debug.WriteLine($"ApplyBullStoch307Signal {quote.TimeStampDateTime.ToShortDateString()}");
+                    quote.IsBullThreeArrow = true;
+                }
+            }
         }
 
-        private void ApplyBearStoch307Signal()
+        public void ApplyBearStoch307Signal()
         {
 
         }
 
-        private void ApplyBullThreeArrowSignal()
+        public void ApplyBullThreeArrowSignal()
         {
             var movAvg30Check = false;
             var macdCheck = false;
@@ -184,7 +273,7 @@ namespace InvestipsMasterQuotesFunctions
             {
                 movAvg30Check = quote.IsPriceCrossMovAvg30Up || movAvg30Check;
                 macdCheck = quote.IsMacdCrossingHorizontalUp || macdCheck;
-                stochasticsCheck = quote.IsStochCossing25Up || stochasticsCheck;
+                stochasticsCheck = quote.IsStoch145Cossing25Up || stochasticsCheck;
 
                 if (movAvg30Check && macdCheck && stochasticsCheck && 
                     (quote.Close > quote.MovingAvg30) &&
@@ -248,11 +337,22 @@ namespace InvestipsMasterQuotesFunctions
             }
         }
 
-        private void MergeStochastics(StochasticsInfo stochasticsInfo)
+        private void MergeStochastics(StochasticsInfo stochasticsInfo, int period)
         {
             for (int i = 0; i < stochasticsInfo.EndIndex; i++)
             {
-                this.Quotes[stochasticsInfo.StartIndex + i].Stochastics14505 = stochasticsInfo.StochasticsSlowsK[i];
+                switch (period)
+                {
+                    case 14:
+                        this.Quotes[stochasticsInfo.StartIndex + i].Stochastics14505 = stochasticsInfo.StochasticsSlowsK[i];
+                        Debug.WriteLine($"ApplyIsStochastics14 {stochasticsInfo.StochasticsSlowsK[i]} -- {this.Quotes[stochasticsInfo.StartIndex + i].TimeStampDateTime}");
+                        break;
+                    case 10:
+                        this.Quotes[stochasticsInfo.StartIndex + i].Stochastics101 = stochasticsInfo.StochasticsSlowsK[i];
+                        Debug.WriteLine($"ApplyIsStochastics10 {stochasticsInfo.StochasticsSlowsK[i]} -- {this.Quotes[stochasticsInfo.StartIndex + i].TimeStampDateTime}");
+                        break;
+                }
+                
             }
         }
     }

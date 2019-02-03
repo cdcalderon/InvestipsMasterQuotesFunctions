@@ -22,11 +22,15 @@ namespace InvestipsMasterQuotesFunctions
             builder.CreateNewQuote(candleQuotes);
             builder.ApplyCandleBarQuote();
             builder.ApplyMovingAverages();
-            builder.ApplyStochatics();
+            builder.ApplyStochatics1405();
+            builder.ApplyStochatics101();
             builder.ApplyMacds();
-            builder.ApplyPriceCrossingUpMovingAverages();
+            builder.ApplyPriceCrossingUpMovingAverage30();
+            builder.ApplyPriceCrossingUpMovingAverage7();
             builder.ApplyStochasticCrossingUp25();
+            builder.ApplyStochasticCrossingUp20();
             builder.ApplyMacdCrossingHorizontalUp();
+            builder.ApplyIsMovingAvg30PointingUp();
 
             builder.ApplySignals();
         }

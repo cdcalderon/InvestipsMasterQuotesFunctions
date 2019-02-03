@@ -26,11 +26,15 @@ namespace InvestipsMasterQuotesFunctions
         public abstract void ApplyCandleBarQuote();
         public abstract void ApplyMovingAverages();
         public abstract void ApplyMacds();
-        public abstract void ApplyStochatics();
+        public abstract void ApplyStochatics1405();
+        public abstract void ApplyStochatics101();
         public abstract void ApplySignals();
-        public abstract void ApplyPriceCrossingUpMovingAverages();
+        public abstract void ApplyPriceCrossingUpMovingAverage30();
+        public abstract void ApplyPriceCrossingUpMovingAverage7();
         public abstract void ApplyStochasticCrossingUp25();
+        public abstract void ApplyStochasticCrossingUp20();
         public abstract void ApplyMacdCrossingHorizontalUp();
+        public abstract void ApplyIsMovingAvg30PointingUp();
 
     }
 }

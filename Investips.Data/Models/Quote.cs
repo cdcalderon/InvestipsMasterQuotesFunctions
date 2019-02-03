@@ -27,10 +27,13 @@ namespace Investips.Data.Models
         public decimal MovingAvg30 { get; set; }
         public decimal Macd8179 { get; set; }
         public decimal Stochastics14505 { get; set; }
-
+        public decimal Stochastics101 { get; set; }
         public bool IsPriceCrossMovAvg30Up { get; set; }
-        public bool IsStochCossing25Up { get; set; }
+        public bool IsPriceCrossMovAvg7Up { get; set; }
+        public bool IsStoch145Cossing25Up { get; set; }
+        public bool IsStoch101Cossing20Up { get; set; }
         public bool IsMacdCrossingHorizontalUp { get; set; }
+        public bool IsMovingAvg30PointingUp { get; set; }
 
         public bool IsBullThreeArrow { get; set; }
     }
