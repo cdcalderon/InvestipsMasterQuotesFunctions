@@ -182,24 +182,17 @@ namespace InvestipsMasterQuotesFunctions
 
             foreach (var quote in this.Quotes)
             {
-                if (quote.IsPriceCrossMovAvg30Up)
-                {
-                    movAvg30Check = true;
-                }
+                movAvg30Check = quote.IsPriceCrossMovAvg30Up || movAvg30Check;
+                macdCheck = quote.IsMacdCrossingHorizontalUp || macdCheck;
+                stochasticsCheck = quote.IsStochCossing25Up || stochasticsCheck;
 
-                if (quote.IsMacdCrossingHorizontalUp)
+                if (movAvg30Check && macdCheck && stochasticsCheck && 
+                    (quote.Close > quote.MovingAvg30) &&
+                    (quote.Stochastics14505 > 25) &&
+                    (quote.Macd8179 > 0)
+                    )
                 {
-                    macdCheck = true;
-                }
-
-                if (quote.IsStochCossing25Up)
-                {
-                    stochasticsCheck = true;
-                }
-
-                if (movAvg30Check && macdCheck && stochasticsCheck)
-                {
-                    Debug.Write("Three arrow Signal Valid ", quote.TimeStampDateTime.ToLongDateString());
+                    Debug.WriteLine($"{quote.TimeStampDateTime.ToShortDateString()}");
                     quote.IsBullThreeArrow = true;
                     movAvg30Check = false;
                     macdCheck = false;
