@@ -243,6 +243,67 @@ namespace InvestipsMasterQuotesFunctions
             }
         }
 
+        public override void ApplyNewLowCheck()
+        {
+            for (var i = 1; i < this.Quotes.Count - 1; i++)
+            {
+                var previousQuoteLow = this.Quotes[i - 1].Low;
+                var currentQuoteLow = this.Quotes[i].Low;
+                var nextQuoteLow = this.Quotes[i + 1].Low;
+
+                if (currentQuoteLow < previousQuoteLow && currentQuoteLow < nextQuoteLow)
+                {
+                    this.Quotes[i].IsNewLow = true;
+                }
+            }
+        }
+
+        public override void ApplyBull45DegreeCheck()
+        {
+            //List<decimal> values = new List<decimal>();
+            //decimal validIncrement = 0;
+            //var incrementCheckIndex = 1;
+            //for (var i = 1; i < this.Quotes.Count; i++)
+            //{
+            //    var previousQuote = this.Quotes[i - 1];
+            //    var currentQuote = this.Quotes[i];
+            //    var previousLow = previousQuote.Low;
+            //    var currentLow = currentQuote.Low;
+
+            //    if (currentQuote.TimeStampDateTime == new DateTime(2018, 2, 9))
+            //    {
+            //        var ss = string.Empty;
+            //    }
+
+            //    //if (incrementCheckIndex == 1)
+            //    //{
+            //    //    for (var j = 0; i < 8; j++)
+            //    //    {
+            //    //        values.Add(currentLow);
+            //    //    }
+            //    //}
+
+            //    if (currentLow > 0)
+            //        if (incrementCheckIndex == 1)
+            //        {
+            //            validIncrement = currentLow - (currentLow + (currentLow * 0.35m));
+            //        }
+            //            var percentIncrease = ((currentLow - previousLow) * 100) / currentLow;
+
+            //        if (percentIncrease >= 0.35m)
+            //        {
+            //            this.Quotes[i].Degree45CheckGrade = incrementCheckIndex;
+            //        }
+            //        else
+            //        {
+            //            incrementCheckIndex = 1;
+            //        }
+            //    }
+            //}
+
+            //var eightDays = this.Quotes.Where(x => x.Degree45CheckGrade == 8).ToList();
+        }
+
         public void ApplyBullStoch307Signal()
         {
             foreach (var quote in this.Quotes)

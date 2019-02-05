@@ -34,6 +34,8 @@ namespace Investips.Data.Models
         public bool IsStoch101Cossing20Up { get; set; }
         public bool IsMacdCrossingHorizontalUp { get; set; }
         public bool IsMovingAvg30PointingUp { get; set; }
+        public bool IsNewLow { get; set; }
+        public int Degree45CheckGrade { get; set; }
 
         public bool IsBullThreeArrow { get; set; }
     }
