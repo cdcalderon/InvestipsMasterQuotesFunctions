@@ -35,7 +35,8 @@ namespace Investips.Data.Models
         public bool IsMacdCrossingHorizontalUp { get; set; }
         public bool IsMovingAvg30PointingUp { get; set; }
         public bool IsNewLow { get; set; }
-        public int Degree45CheckGrade { get; set; }
+        public bool IsBullEight45Degreed { get; set; }
+        public int FourtyFiveDegreeLevel { get; set; }
 
         public bool IsBullThreeArrow { get; set; }
     }
