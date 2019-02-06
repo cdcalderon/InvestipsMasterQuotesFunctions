@@ -260,49 +260,92 @@ namespace InvestipsMasterQuotesFunctions
 
         public override void ApplyBull45DegreeCheck()
         {
-            //List<decimal> values = new List<decimal>();
-            //decimal validIncrement = 0;
-            //var incrementCheckIndex = 1;
-            //for (var i = 1; i < this.Quotes.Count; i++)
-            //{
-            //    var previousQuote = this.Quotes[i - 1];
-            //    var currentQuote = this.Quotes[i];
-            //    var previousLow = previousQuote.Low;
-            //    var currentLow = currentQuote.Low;
+            Console.WriteLine("FindBig8 initializing");
+            List<decimal> values = new List<decimal>();
+            decimal validIncrementPrice = 0;
+            var incrementCheckIndex = 1;
+            decimal initialQuotePrice = 0;
+            for (var i = 0; i < quotes.Count; i++)
+            {
+                Console.WriteLine("FindBig8 i {0}", i);
+                var currentLow = quotes[i];
 
-            //    if (currentQuote.TimeStampDateTime == new DateTime(2018, 2, 9))
-            //    {
-            //        var ss = string.Empty;
-            //    }
+                if (incrementCheckIndex == 1)
+                {
+                    Console.WriteLine("FindBig8 incrementCheckIndex {0}", incrementCheckIndex);
+                    initialQuotePrice = currentLow;
 
-            //    //if (incrementCheckIndex == 1)
-            //    //{
-            //    //    for (var j = 0; i < 8; j++)
-            //    //    {
-            //    //        values.Add(currentLow);
-            //    //    }
-            //    //}
+                    Console.WriteLine("validIncrementPrice = {0} + ({1} * 0.0035m) * {2}; ", initialQuotePrice, initialQuotePrice, incrementCheckIndex);
+                    validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0035m) * incrementCheckIndex;
+                    Console.WriteLine("FindBig8 validIncrementPrice Initial {0}", validIncrementPrice);
+                    incrementCheckIndex = incrementCheckIndex + 1;
+                    continue;
+                }
 
-            //    if (currentLow > 0)
-            //        if (incrementCheckIndex == 1)
-            //        {
-            //            validIncrement = currentLow - (currentLow + (currentLow * 0.35m));
-            //        }
-            //            var percentIncrease = ((currentLow - previousLow) * 100) / currentLow;
+                if (incrementCheckIndex > 2)
+                {
+                    Console.WriteLine("incrementCheckIndex > 2  {0}", validIncrementPrice);
+                    validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0035m) * (incrementCheckIndex - 1);
+                }
 
-            //        if (percentIncrease >= 0.35m)
-            //        {
-            //            this.Quotes[i].Degree45CheckGrade = incrementCheckIndex;
-            //        }
-            //        else
-            //        {
-            //            incrementCheckIndex = 1;
-            //        }
-            //    }
-            //}
+                Console.WriteLine("FindBig8 validIncrementPrice {0}", validIncrementPrice);
+                //var percentIncrease = (validIncrement * 100) / currentLow;
 
-            //var eightDays = this.Quotes.Where(x => x.Degree45CheckGrade == 8).ToList();
-        }
+                Console.WriteLine("FindBig8 currentLow {0}", currentLow);
+                if (currentLow >= validIncrementPrice)
+                {
+                    Console.WriteLine("Found one big eight value yay yay yayayayayyayayayayay {0} {1}", currentLow, validIncrementPrice);
+                    incrementCheckIndex = incrementCheckIndex + 1;
+                }
+                else
+                {
+                    Console.WriteLine("Resetting Resetting Resetting Resetting Resetting Resetting Resetting incrementCheckIndex");
+                    incrementCheckIndex = 1;
+                }
+
+                //List<decimal> values = new List<decimal>();
+                //decimal validIncrement = 0;
+                //var incrementCheckIndex = 1;
+                //for (var i = 1; i < this.Quotes.Count; i++)
+                //{
+                //    var previousQuote = this.Quotes[i - 1];
+                //    var currentQuote = this.Quotes[i];
+                //    var previousLow = previousQuote.Low;
+                //    var currentLow = currentQuote.Low;
+
+                //    if (currentQuote.TimeStampDateTime == new DateTime(2018, 2, 9))
+                //    {
+                //        var ss = string.Empty;
+                //    }
+
+                //    //if (incrementCheckIndex == 1)
+                //    //{
+                //    //    for (var j = 0; i < 8; j++)
+                //    //    {
+                //    //        values.Add(currentLow);
+                //    //    }
+                //    //}
+
+                //    if (currentLow > 0)
+                //        if (incrementCheckIndex == 1)
+                //        {
+                //            validIncrement = currentLow - (currentLow + (currentLow * 0.35m));
+                //        }
+                //            var percentIncrease = ((currentLow - previousLow) * 100) / currentLow;
+
+                //        if (percentIncrease >= 0.35m)
+                //        {
+                //            this.Quotes[i].Degree45CheckGrade = incrementCheckIndex;
+                //        }
+                //        else
+                //        {
+                //            incrementCheckIndex = 1;
+                //        }
+                //    }
+                //}
+
+                //var eightDays = this.Quotes.Where(x => x.Degree45CheckGrade == 8).ToList();
+            }
 
         public void ApplyBullStoch307Signal()
         {
