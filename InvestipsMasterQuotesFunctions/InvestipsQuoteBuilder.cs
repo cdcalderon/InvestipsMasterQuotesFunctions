@@ -293,8 +293,6 @@ namespace InvestipsMasterQuotesFunctions
                 {
                     incrementCheckIndex = 1;
                 }
-
-
             }
         }
 
