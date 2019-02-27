@@ -12,15 +12,17 @@ namespace InvestipsMasterQuotesFunctions
     {
         protected IList<Quote> Quotes;
         protected IEnumerable<Candle> QuoteCandles;
+        protected string Symbol;
         public IList<Quote> GetQuotes()
         {
             return Quotes;
         }
 
-        public void CreateNewQuote(IEnumerable<Candle> quoteCandles)
+        public void CreateNewQuote(IEnumerable<Candle> quoteCandles, string symbol)
         {
             this.Quotes = new List<Quote>();
             this.QuoteCandles = quoteCandles;
+            this.Symbol = symbol;
         }
 
         public abstract void ApplyCandleBarQuote();

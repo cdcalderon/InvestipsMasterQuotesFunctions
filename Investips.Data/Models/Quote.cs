@@ -22,12 +22,12 @@ namespace Investips.Data.Models
 
         public DateTime TimeStampDateTime { get; set; }
 
-        public decimal MovingAvg7 { get; set; }
-        public decimal MovingAvg10 { get; set; }
-        public decimal MovingAvg30 { get; set; }
-        public decimal Macd8179 { get; set; }
-        public decimal Stochastics14505 { get; set; }
-        public decimal Stochastics101 { get; set; }
+        public decimal? MovingAvg7 { get; set; }
+        public decimal? MovingAvg10 { get; set; }
+        public decimal? MovingAvg30 { get; set; }
+        public decimal? Macd8179 { get; set; }
+        public decimal? Stochastics14505 { get; set; }
+        public decimal? Stochastics101 { get; set; }
         public bool IsPriceCrossMovAvg30Up { get; set; }
         public bool IsPriceCrossMovAvg7Up { get; set; }
         public bool IsStoch145Cossing25Up { get; set; }

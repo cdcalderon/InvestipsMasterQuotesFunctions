@@ -19,6 +19,7 @@ namespace InvestipsMasterQuotesFunctions
             foreach (var candle in this.QuoteCandles)
             {
                 var quote = new Quote();
+                quote.Symbol = this.Symbol;
                 quote.Open = candle.Open;
                 quote.High = candle.High;
                 quote.Close = candle.Close;
