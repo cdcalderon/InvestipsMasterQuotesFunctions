@@ -44,68 +44,104 @@ namespace InvestipsMasterQuotesFunctions.Functions
             int seconds = Convert.ToInt32(result.TotalSeconds);
 
 
-            IEnumerable<Quote> quotes = new List<Quote>();
+            List<Quote> quotes = new List<Quote>();
+            var matchedQuotes = new List<Quote>();
             using (var db = new InvestipsQuotesContext())
             {
-                var matchedQuotes = new List<Quote>();
-                var flagDegree = 0;
-
                 quotes = db.Quotes.Where(q => q.Symbol == symbol && 
                                               (q.IsMacdCrossingHorizontalUp || q.IsPriceCrossMovAvg30Up || q.IsStoch145Cossing25Up))
                                               .OrderBy(q => q.TimeStampDateTime).ToList();
-                foreach (var quote in quotes)
+                for(int i = 0; i < quotes.Count; i++)
                 {
-                    if (quote.IsMacdCrossingHorizontalUp)
+                    
+                    var quote = quotes[i];
+                    var isMacd = quote.IsMacdCrossingHorizontalUp ? 1: 0;
+                    var isMovAvg30 = quote.IsPriceCrossMovAvg30Up ? 1 : 0;
+                    var isStoch145 = quote.IsStoch145Cossing25Up ? 1 : 0;
+                    var markCount = isMacd + isMovAvg30 + isStoch145;
+
+
+                    if (quote.IsMacdCrossingHorizontalUp && PreviousTwoAreInRange(i, quote, quotes, markCount))
                     {
-                        flagDegree++;
-                        flagDegree = 0;
+                        matchedQuotes.Add(quote);
                     }
-                    if (quote.IsPriceCrossMovAvg30Up)
+                    if (quote.IsPriceCrossMovAvg30Up && PreviousTwoAreInRange(i, quote, quotes, markCount))
                     {
-                        flagDegree++;
-                        flagDegree = 0;
+                        matchedQuotes.Add(quote);
                     }
-                    if (quote.IsStoch145Cossing25Up)
+                    if (quote.IsStoch145Cossing25Up && PreviousTwoAreInRange(i, quote, quotes, markCount))
                     {
-                        flagDegree++;
-                        flagDegree = 0;
+                        matchedQuotes.Add(quote);
                     }
                     
                 }
 
-                log.Info("Quote received");
+                log.Info("Quote matched Done");
             }
-            
-            var ids = Enumerable.Range(0, quotes.Count() - 1).ToList();
-            var times = quotes.Select(x => Convert.ToInt64(ToUnixTimeStamp(x.TimeStampDateTime))).ToList();
-            var colors = quotes.Select(x => "green").ToList();
-            var texts = quotes.Select(x => "3 Green Arrows").ToList();
-            var labels = quotes.Select(x => "G").ToList();
-            var labelFontColors = quotes.Select(x => "black").ToList();
-            var minSizes = quotes.Select(x => 20).ToList();
 
-            var marks = new SignalMarks()
+            if (matchedQuotes.Count > 0)
             {
-                id = ids,
-                time = times,
-                color = colors,
-                text = texts,
-                label = labels,
-                labelFontColor = labelFontColors,
-                minSize = minSizes
-            };
-            var jsonToReturn = JsonConvert.SerializeObject(marks);
+                var ids = Enumerable.Range(0, matchedQuotes.Count() - 1).ToList();
+                var times = matchedQuotes.Select(x => Convert.ToInt64(ToUnixTimeStamp(x.TimeStampDateTime))).ToList();
+                var colors = matchedQuotes.Select(x => "green").ToList();
+                var texts = matchedQuotes.Select(x => "3 Green Arrows").ToList();
+                var labels = matchedQuotes.Select(x => "G").ToList();
+                var labelFontColors = matchedQuotes.Select(x => "black").ToList();
+                var minSizes = matchedQuotes.Select(x => 20).ToList();
 
-            //return new HttpResponseMessage(HttpStatusCode.OK)
-            //{
-            //    Content = new StringContent(quotes, Encoding.UTF8, "application/json")
-            //};
+                var marks = new SignalMarks()
+                {
+                    id = ids,
+                    time = times,
+                    color = colors,
+                    text = texts,
+                    label = labels,
+                    labelFontColor = labelFontColors,
+                    minSize = minSizes
+                };
+                var jsonToReturn = JsonConvert.SerializeObject(marks);
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(jsonToReturn, Encoding.UTF8, "application/json")
+                };
+            }
 
             return new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StringContent(jsonToReturn, Encoding.UTF8, "application/json")
+                Content = new StringContent(JsonConvert.SerializeObject(new SignalMarks()), Encoding.UTF8, "application/json")
             };
-            //return req.CreateResponse(HttpStatusCode.OK, jsonToReturn);
+        }
+
+        private static bool PreviousTwoAreInRange(int i, Quote quote, List<Quote> quotes, int markCount)
+        {
+            if (markCount == 3)
+            {
+                return true;
+            }
+
+            if (markCount == 2 && i > 0)
+            {
+                if ((i - 1) > 0)
+                {
+                    var previousQuote1 = quotes[i - 1];
+                    if (quote.TimeStampDateTime.Subtract(previousQuote1.TimeStampDateTime).Days < 20)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else if (markCount == 1 && i > 1)
+            {
+                var previousQuote1 = quotes[i - 1];
+                var previousQuote2 = quotes[i - 2];
+                if (quote.TimeStampDateTime.Subtract(previousQuote1.TimeStampDateTime).Days < 20 &&
+                    quote.TimeStampDateTime.Subtract(previousQuote2.TimeStampDateTime).Days < 20)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
         }
 
         public static double ToUnixTimeStamp(DateTime dtime)

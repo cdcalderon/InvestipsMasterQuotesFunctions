@@ -37,6 +37,7 @@ namespace InvestipsMasterQuotesFunctions
         public abstract void ApplyStochasticCrossingUp20();
         public abstract void ApplyMacdCrossingHorizontalUp();
         public abstract void ApplyIsMovingAvg30PointingUp();
+        public abstract void ApplyIsStochMovingUp();
         public abstract void ApplyBull45DegreeCheck();
         public abstract void ApplyNewLowCheck();
 

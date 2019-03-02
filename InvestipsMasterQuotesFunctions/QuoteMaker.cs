@@ -31,6 +31,7 @@ namespace InvestipsMasterQuotesFunctions
             builder.ApplyStochasticCrossingUp20();
             builder.ApplyMacdCrossingHorizontalUp();
             builder.ApplyIsMovingAvg30PointingUp();
+            builder.ApplyIsStochMovingUp();
             builder.ApplyNewLowCheck();
             builder.ApplyBull45DegreeCheck();
 

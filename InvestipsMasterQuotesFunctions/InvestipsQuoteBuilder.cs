@@ -175,6 +175,25 @@ namespace InvestipsMasterQuotesFunctions
             }
         }
 
+        public override void ApplyIsStochMovingUp()
+        {
+            const decimal tolerance = 0.00015m;
+            for (var i = 30 ; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var currentStoch14505 = currentQuote.Stochastics14505;
+                var previousStoch14505 = previousQuote.Stochastics14505;
+
+                if (currentStoch14505 > previousStoch14505)
+                {
+
+                    this.Quotes[i].IsStoch14505PointingUp = true;
+                    Debug.WriteLine($"ApplyIsStoch14505PointingUp {currentQuote.TimeStampDateTime.ToShortDateString()}");
+                }
+            }
+        }
+
         public override void ApplyPriceCrossingUpMovingAverage7()
         {
             // define a small tolerance on our checks to avoid bouncing
