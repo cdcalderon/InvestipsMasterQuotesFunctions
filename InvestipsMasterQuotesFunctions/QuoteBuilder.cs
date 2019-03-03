@@ -40,6 +40,7 @@ namespace InvestipsMasterQuotesFunctions
         public abstract void ApplyIsStochMovingUp();
         public abstract void ApplyBull45DegreeCheck();
         public abstract void ApplyNewLowCheck();
+        public abstract void ApplySuperGapCheck();
 
     }
 }

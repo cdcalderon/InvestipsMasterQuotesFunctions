@@ -34,6 +34,7 @@ namespace InvestipsMasterQuotesFunctions
             builder.ApplyIsStochMovingUp();
             builder.ApplyNewLowCheck();
             builder.ApplyBull45DegreeCheck();
+            builder.ApplySuperGapCheck();
 
             builder.ApplySignals();
         }

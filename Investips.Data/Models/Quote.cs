@@ -40,5 +40,6 @@ namespace Investips.Data.Models
         public int FourtyFiveDegreeLevel { get; set; }
 
         public bool IsBullThreeArrow { get; set; }
+        public bool IsSuperGap { get; set; }
     }
 }
