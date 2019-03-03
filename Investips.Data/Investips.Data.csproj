@@ -64,6 +64,10 @@
     <Compile Include="Migrations\201902270602541_AddQuoteProperties.Designer.cs">
       <DependentUpon>201902270602541_AddQuoteProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903020921169_AddIsStoch14505PointingUp.cs" />
+    <Compile Include="Migrations\201903020921169_AddIsStoch14505PointingUp.Designer.cs">
+      <DependentUpon>201903020921169_AddIsStoch14505PointingUp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\InvestipsQuotesContext.cs" />
     <Compile Include="Models\Quote.cs" />
@@ -85,6 +89,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902270602541_AddQuoteProperties.resx">
       <DependentUpon>201902270602541_AddQuoteProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903020921169_AddIsStoch14505PointingUp.resx">
+      <DependentUpon>201903020921169_AddIsStoch14505PointingUp.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
