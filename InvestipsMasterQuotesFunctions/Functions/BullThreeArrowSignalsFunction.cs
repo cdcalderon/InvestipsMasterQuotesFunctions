@@ -60,20 +60,21 @@ namespace InvestipsMasterQuotesFunctions.Functions
                     var isStoch145 = quote.IsStoch145Cossing25Up ? 1 : 0;
                     var markCount = isMacd + isMovAvg30 + isStoch145;
 
-
-                    if (quote.IsMacdCrossingHorizontalUp && PreviousTwoAreInRange(i, quote, quotes, markCount))
+                    if (quote.IsStoch14505PointingUp)
                     {
-                        matchedQuotes.Add(quote);
+                        if (quote.IsMacdCrossingHorizontalUp && PreviousTwoAreInRange(i, quote, quotes, markCount))
+                        {
+                            matchedQuotes.Add(quote);
+                        }
+                        if (quote.IsPriceCrossMovAvg30Up && PreviousTwoAreInRange(i, quote, quotes, markCount))
+                        {
+                            matchedQuotes.Add(quote);
+                        }
+                        if (quote.IsStoch145Cossing25Up && PreviousTwoAreInRange(i, quote, quotes, markCount))
+                        {
+                            matchedQuotes.Add(quote);
+                        }
                     }
-                    if (quote.IsPriceCrossMovAvg30Up && PreviousTwoAreInRange(i, quote, quotes, markCount))
-                    {
-                        matchedQuotes.Add(quote);
-                    }
-                    if (quote.IsStoch145Cossing25Up && PreviousTwoAreInRange(i, quote, quotes, markCount))
-                    {
-                        matchedQuotes.Add(quote);
-                    }
-                    
                 }
 
                 log.Info("Quote matched Done");
@@ -114,6 +115,7 @@ namespace InvestipsMasterQuotesFunctions.Functions
 
         private static bool PreviousTwoAreInRange(int i, Quote quote, List<Quote> quotes, int markCount)
         {
+            var timeDaysLimit = 10;
             if (markCount == 3)
             {
                 return true;
@@ -124,7 +126,7 @@ namespace InvestipsMasterQuotesFunctions.Functions
                 if ((i - 1) > 0)
                 {
                     var previousQuote1 = quotes[i - 1];
-                    if (quote.TimeStampDateTime.Subtract(previousQuote1.TimeStampDateTime).Days < 20)
+                    if (quote.TimeStampDateTime.Subtract(previousQuote1.TimeStampDateTime).Days < timeDaysLimit)
                     {
                         return true;
                     }
@@ -134,8 +136,8 @@ namespace InvestipsMasterQuotesFunctions.Functions
             {
                 var previousQuote1 = quotes[i - 1];
                 var previousQuote2 = quotes[i - 2];
-                if (quote.TimeStampDateTime.Subtract(previousQuote1.TimeStampDateTime).Days < 20 &&
-                    quote.TimeStampDateTime.Subtract(previousQuote2.TimeStampDateTime).Days < 20)
+                if (quote.TimeStampDateTime.Subtract(previousQuote1.TimeStampDateTime).Days < timeDaysLimit &&
+                    quote.TimeStampDateTime.Subtract(previousQuote2.TimeStampDateTime).Days < timeDaysLimit)
                 {
                     return true;
                 }
