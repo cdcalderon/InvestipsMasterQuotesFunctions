@@ -324,10 +324,10 @@ namespace InvestipsMasterQuotesFunctions
                 var previousQuote = this.Quotes[i - 1];
                 var currentQuote = this.Quotes[i];
 
-                var diffCriteriaAmount = 3.5m;
+                var diffCriteriaAmount = GetDiffAmount(currentQuote.Close);
                 var diffCriteriaPercent = currentQuote.Close * tenPercent;
 
-                var diffBetweenCurrentPreviousClose = Math.Abs((currentQuote.Close - previousQuote.Close));
+                var diffBetweenCurrentPreviousClose = currentQuote.Close - previousQuote.Close;
                 var diffBetweenCurrentOpenPreviousClose = Math.Abs((currentQuote.Open - previousQuote.Close));
 
                 if (diffBetweenCurrentPreviousClose > diffCriteriaAmount || diffBetweenCurrentPreviousClose >= diffCriteriaPercent)
@@ -454,6 +454,36 @@ namespace InvestipsMasterQuotesFunctions
                 }
                 
             }
+        }
+
+        private decimal GetDiffAmount(decimal closePrice)
+        {
+            if (closePrice > 0 && closePrice < 200)
+            {
+                return 3.5m;
+            }
+            else if (closePrice > 200 && closePrice < 400)
+            {
+                return 8;
+            }
+            else if (closePrice > 400 && closePrice < 600)
+            {
+                return 12.5m;
+            }
+            else if (closePrice > 600 && closePrice < 800)
+            {
+                return 20;
+            }
+            else if (closePrice > 800 && closePrice < 1000)
+            {
+                return 25;
+            }
+            else if (closePrice > 1000)
+            {
+                return 30;
+            }
+
+            return 3.5m;
         }
     }
 }

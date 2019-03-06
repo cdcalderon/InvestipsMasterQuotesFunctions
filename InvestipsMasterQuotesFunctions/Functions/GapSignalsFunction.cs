@@ -47,37 +47,21 @@ namespace InvestipsMasterQuotesFunctions.Functions
 
 
             List<Quote> quotes = new List<Quote>();
-            var matchedQuotes = new List<Quote>();
             using (var db = new InvestipsQuotesContext())
             {
-                quotes = db.Quotes.Where(q => q.Symbol == symbol &&
-                                              (q.IsMacdCrossingHorizontalUp || q.IsPriceCrossMovAvg30Up ||
-                                               q.IsStoch145Cossing25Up))
-                    .OrderBy(q => q.TimeStampDateTime).ToList();
-                for (int i = 0; i < quotes.Count; i++)
-                {
-
-                    var quote = quotes[i];
-                    var isMacd = quote.IsMacdCrossingHorizontalUp ? 1 : 0;
-                    var isMovAvg30 = quote.IsPriceCrossMovAvg30Up ? 1 : 0;
-                    var isStoch145 = quote.IsStoch145Cossing25Up ? 1 : 0;
-                    var markCount = isMacd + isMovAvg30 + isStoch145;
-                    
-                }
-
-                log.Info("Quote matched Done");
+                quotes = db.Quotes.Where(q => q.IsSuperGap == true).ToList();
             }
 
-            if (matchedQuotes.Count > 0)
+            if (quotes.Count > 0)
             {
-                var ids = Enumerable.Range(0, matchedQuotes.Count() - 1).ToList();
-                var times = matchedQuotes.Select(x => Convert.ToInt64(ToUnixTimeStamp(x.TimeStampDateTime)))
+                var ids = Enumerable.Range(0, quotes.Count() - 1).ToList();
+                var times = quotes.Select(x => Convert.ToInt64(ToUnixTimeStamp(x.TimeStampDateTime)))
                     .ToList();
-                var colors = matchedQuotes.Select(x => "green").ToList();
-                var texts = matchedQuotes.Select(x => "3 Green Arrows").ToList();
-                var labels = matchedQuotes.Select(x => "G").ToList();
-                var labelFontColors = matchedQuotes.Select(x => "black").ToList();
-                var minSizes = matchedQuotes.Select(x => 20).ToList();
+                var colors = quotes.Select(x => "blue").ToList();
+                var texts = quotes.Select(x => "Super Gaps").ToList();
+                var labels = quotes.Select(x => "G").ToList();
+                var labelFontColors = quotes.Select(x => "white").ToList();
+                var minSizes = quotes.Select(x => 20).ToList();
 
                 var marks = new SignalMarks()
                 {

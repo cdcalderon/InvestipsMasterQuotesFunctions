@@ -68,6 +68,10 @@
     <Compile Include="Migrations\201903020921169_AddIsStoch14505PointingUp.Designer.cs">
       <DependentUpon>201903020921169_AddIsStoch14505PointingUp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903030845063_AddIsSuperGap.cs" />
+    <Compile Include="Migrations\201903030845063_AddIsSuperGap.Designer.cs">
+      <DependentUpon>201903030845063_AddIsSuperGap.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\InvestipsQuotesContext.cs" />
     <Compile Include="Models\Quote.cs" />
@@ -92,6 +96,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903020921169_AddIsStoch14505PointingUp.resx">
       <DependentUpon>201903020921169_AddIsStoch14505PointingUp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903030845063_AddIsSuperGap.resx">
+      <DependentUpon>201903030845063_AddIsSuperGap.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
