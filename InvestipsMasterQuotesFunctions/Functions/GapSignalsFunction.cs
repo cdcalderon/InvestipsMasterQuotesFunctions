@@ -52,6 +52,7 @@ namespace InvestipsMasterQuotesFunctions.Functions
                 quotes = db.Quotes.Where(q => q.IsSuperGap == true).ToList();
             }
 
+            quotes.Add(quotes.Last()); // Temporary POC fix for issue displaying last item in UI
             if (quotes.Count > 0)
             {
                 var ids = Enumerable.Range(0, quotes.Count() - 1).ToList();
@@ -73,6 +74,7 @@ namespace InvestipsMasterQuotesFunctions.Functions
                     labelFontColor = labelFontColors,
                     minSize = minSizes
                 };
+                
                 var jsonToReturn = JsonConvert.SerializeObject(marks);
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
@@ -89,7 +91,12 @@ namespace InvestipsMasterQuotesFunctions.Functions
         
         public static double ToUnixTimeStamp(DateTime dtime)
         {
-            return (dtime - new DateTime(1970, 1, 1).ToLocalTime()).TotalSeconds;
+            var dd = (dtime - new DateTime(1970, 1, 1));
+            var dd2 = (dtime - new DateTime(1970, 1, 1).ToLocalTime());
+
+            var tt1 = dd.TotalSeconds;
+            var tt2 = dd2.TotalSeconds;
+            return tt1;
         }
 
         public static DateTime FromUnixTimeStamp(double unixTimeStamp)

@@ -328,11 +328,14 @@ namespace InvestipsMasterQuotesFunctions
                 var diffCriteriaPercent = currentQuote.Close * tenPercent;
 
                 var diffBetweenCurrentPreviousClose = currentQuote.Close - previousQuote.Close;
-                var diffBetweenCurrentOpenPreviousClose = Math.Abs((currentQuote.Open - previousQuote.Close));
+                var diffBetweenCurrentLowPreviousHigh = currentQuote.Low - previousQuote.High;
 
                 if (diffBetweenCurrentPreviousClose > diffCriteriaAmount || diffBetweenCurrentPreviousClose >= diffCriteriaPercent)
                 {
-                    this.Quotes[i].IsSuperGap = true;
+                    if (diffBetweenCurrentLowPreviousHigh > diffCriteriaAmount || diffBetweenCurrentLowPreviousHigh >= diffCriteriaPercent)
+                    {
+                        this.Quotes[i].IsSuperGap = true;
+                    }
                 }
                 //return ((diffBetweenCurrentPreviousClose > diffCriteriaAmount) ||
                 //        (diffBetweenCurrentPreviousClose >= diffCriteriaPercent)) &&
@@ -462,25 +465,21 @@ namespace InvestipsMasterQuotesFunctions
             {
                 return 3.5m;
             }
-            else if (closePrice > 200 && closePrice < 400)
-            {
-                return 8;
-            }
             else if (closePrice > 400 && closePrice < 600)
             {
-                return 12.5m;
+                return 5.5m;
             }
             else if (closePrice > 600 && closePrice < 800)
             {
-                return 20;
+                return 7;
             }
             else if (closePrice > 800 && closePrice < 1000)
             {
-                return 25;
+                return 8;
             }
             else if (closePrice > 1000)
             {
-                return 30;
+                return 10;
             }
 
             return 3.5m;
