@@ -28,7 +28,7 @@ namespace InvestipsMasterQuotesFunctions.Functions
 
             foreach (var symbol in symbols)
             {
-                var history = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2018, 1, 1), DateTime.Now, Period.Daily);
+                var history = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2016, 1, 1), DateTime.Now, Period.Daily);
                 quoteMaker.BuildQuote(history, symbol);
                 quotes = quoteMaker.GetQuotes();
             }
