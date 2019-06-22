@@ -49,12 +49,14 @@ namespace InvestipsMasterQuotesFunctions.Functions
             List<Quote> quotes = new List<Quote>();
             using (var db = new InvestipsQuotesContext())
             {
-                quotes = db.Quotes.Where(q => q.IsSuperGap == true).ToList();
+                quotes = db.Quotes.Where(q => q.IsSuperGap == true && 
+                                              q.Symbol == symbol).ToList();
             }
 
-            quotes.Add(quotes.Last()); // Temporary POC fix for issue displaying last item in UI
+            
             if (quotes.Count > 0)
             {
+                quotes.Add(quotes.Last()); // Temporary POC fix for issue displaying last item in UI
                 var ids = Enumerable.Range(0, quotes.Count() - 1).ToList();
                 var times = quotes.Select(x => Convert.ToInt64(ToUnixTimeStamp(x.TimeStampDateTime)))
                     .ToList();

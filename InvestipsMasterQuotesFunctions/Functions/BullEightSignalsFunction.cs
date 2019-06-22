@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Investips.Data.Models;
 using InvestipsMasterQuotesFunctions.DTO;
 using Microsoft.Azure.WebJobs;
@@ -13,12 +14,13 @@ using Newtonsoft.Json;
 
 namespace InvestipsMasterQuotesFunctions.Functions
 {
-    public static class StochBull307SignalsFunction
+    public static class BullEightSignalsFunction
     {
-        [FunctionName("StochBull307SignalsFunction")]
+        [FunctionName("BullEightSignalsFunction")]
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")]
             HttpRequestMessage req, TraceWriter log)
         {
+
             string from = req.GetQueryNameValuePairs()
                 .FirstOrDefault(q => String.Compare(q.Key, "from", StringComparison.OrdinalIgnoreCase) == 0)
                 .Value;
@@ -36,18 +38,15 @@ namespace InvestipsMasterQuotesFunctions.Functions
                 .Value;
             // parse query parameter
             string name = req.GetQueryNameValuePairs()
-                .FirstOrDefault(q => string.Compare(q.Key, "name", true) == 0)
+                .FirstOrDefault(q => String.Compare(q.Key, "name", StringComparison.OrdinalIgnoreCase) == 0)
                 .Value;
 
             List<Quote> quotes = new List<Quote>();
             using (var db = new InvestipsQuotesContext())
             {
                 quotes = db.Quotes.Where(
-                    q => q.IsStoch101Cossing20Up &&
-                         q.IsPriceCrossMovAvg7Up &&
-                         q.IsMovingAvg30PointingUp &&
-                         q.Symbol == symbol
-                    ).ToList();
+                    q => q.IsBullEight45Degreed && q.Symbol == symbol
+                ).ToList();
             }
             
             if (quotes.Count > 0)
@@ -56,9 +55,9 @@ namespace InvestipsMasterQuotesFunctions.Functions
                 var ids = Enumerable.Range(0, quotes.Count() - 1).ToList();
                 var times = quotes.Select(x => Convert.ToInt64(ToUnixTimeStamp(x.TimeStampDateTime)))
                     .ToList();
-                var colors = quotes.Select(x => "yellow").ToList();
-                var texts = quotes.Select(x => "STOCH307").ToList();
-                var labels = quotes.Select(x => "ST").ToList();
+                var colors = quotes.Select(x => "green").ToList();
+                var texts = quotes.Select(x => "BullBigEight").ToList();
+                var labels = quotes.Select(x => "B8").ToList();
                 var labelFontColors = quotes.Select(x => "black").ToList();
                 var minSizes = quotes.Select(x => 20).ToList();
 
@@ -85,6 +84,7 @@ namespace InvestipsMasterQuotesFunctions.Functions
                 Content = new StringContent(JsonConvert.SerializeObject(new SignalMarks()), Encoding.UTF8,
                     "application/json")
             };
+
         }
 
         public static double ToUnixTimeStamp(DateTime dtime)

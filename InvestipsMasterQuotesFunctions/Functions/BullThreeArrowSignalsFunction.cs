@@ -62,18 +62,23 @@ namespace InvestipsMasterQuotesFunctions.Functions
 
                     if (quote.IsStoch14505PointingUp)
                     {
-                        if (quote.IsMacdCrossingHorizontalUp && PreviousTwoAreInRange(i, quote, quotes, markCount))
+                        if (quote.IsMacdCrossingHorizontalUp && quote.IsPriceCrossMovAvg30Up &&
+                            quote.IsStoch145Cossing25Up)
                         {
                             matchedQuotes.Add(quote);
                         }
-                        if (quote.IsPriceCrossMovAvg30Up && PreviousTwoAreInRange(i, quote, quotes, markCount))
-                        {
-                            matchedQuotes.Add(quote);
-                        }
-                        if (quote.IsStoch145Cossing25Up && PreviousTwoAreInRange(i, quote, quotes, markCount))
-                        {
-                            matchedQuotes.Add(quote);
-                        }
+                        //if (quote.IsMacdCrossingHorizontalUp && PreviousTwoAreInRange(i, quote, quotes, markCount))
+                        //{
+                        //    matchedQuotes.Add(quote);
+                        //}
+                        //if (quote.IsPriceCrossMovAvg30Up && PreviousTwoAreInRange(i, quote, quotes, markCount))
+                        //{
+                        //    matchedQuotes.Add(quote);
+                        //}
+                        //if (quote.IsStoch145Cossing25Up && PreviousTwoAreInRange(i, quote, quotes, markCount))
+                        //{
+                        //    matchedQuotes.Add(quote);
+                        //}
                     }
                 }
 

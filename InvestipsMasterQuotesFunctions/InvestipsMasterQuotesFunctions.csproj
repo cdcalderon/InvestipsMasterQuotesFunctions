@@ -4,7 +4,9 @@
     <AzureFunctionsVersion>v1</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="EFUtilities" Version="1.0.2" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="EntityFramework.Utilities.Denis" Version="1.0.3" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.24" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="TA-Lib" Version="0.5.0.3" />

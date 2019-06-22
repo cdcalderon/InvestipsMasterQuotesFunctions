@@ -271,50 +271,252 @@ namespace InvestipsMasterQuotesFunctions
                 var currentQuoteLow = this.Quotes[i].Low;
                 var nextQuoteLow = this.Quotes[i + 1].Low;
 
-                if (currentQuoteLow < previousQuoteLow && currentQuoteLow < nextQuoteLow)
+                if (currentQuoteLow <= previousQuoteLow && currentQuoteLow <= nextQuoteLow)
                 {
                     this.Quotes[i].IsNewLow = true;
                 }
             }
         }
 
+        //public override void ApplyBull45DegreeCheck()
+        //{
+        //    var incrementCheckIndex = 1;
+        //    decimal initialQuotePrice = 0;
+
+        //    foreach (var currentQuote in this.Quotes)
+        //    {
+        //        var currentLow = currentQuote.Low;
+
+        //        decimal validIncrementPrice = 0;
+        //        if (currentQuote.IsNewLow)
+        //        {
+        //            initialQuotePrice = currentLow;
+
+        //            incrementCheckIndex = incrementCheckIndex + 1;
+        //            continue;
+        //        }
+
+        //        if (incrementCheckIndex < 2) continue;
+
+        //        validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0035m) * (incrementCheckIndex - 1);
+
+        //        if (currentLow >= validIncrementPrice)
+        //        {
+        //            incrementCheckIndex = incrementCheckIndex + 1;
+        //            currentQuote.FourtyFiveDegreeLevel = incrementCheckIndex;
+        //            if (incrementCheckIndex == 8)
+        //            {
+        //                currentQuote.IsBullEight45Degreed = true;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            incrementCheckIndex = 1;
+        //        }
+        //    }
+        //}
+
+        //public override void ApplyBull45DegreeCheck()
+        //{
+        //    var incrementCheckIndex = 1;
+        //    decimal initialQuotePrice = 0;
+
+
+        //    foreach (var currentQuote in this.Quotes)
+        //    {
+        //        if (currentQuote.Symbol == "ANDE" && currentQuote.TimeStampDateTime.Day == 17 &&
+        //                                  currentQuote.TimeStampDateTime.Year == 2016 &&
+        //                                  currentQuote.TimeStampDateTime.Month == 5)
+        //        {
+        //            var t = string.Empty;
+        //        }
+        //        var currentLow = currentQuote.Low;
+
+        //        decimal validIncrementPrice = 0;
+        //        if (currentQuote.IsNewLow)
+        //        {
+        //            initialQuotePrice = currentLow;
+
+        //            incrementCheckIndex = incrementCheckIndex + 1;
+        //            continue;
+        //        }
+
+        //        //if (incrementCheckIndex < 2) continue;
+
+        //        validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0040m) * (incrementCheckIndex - 1);
+
+        //        if (currentLow >= validIncrementPrice)
+        //        {
+        //            incrementCheckIndex = incrementCheckIndex + 1;
+        //            currentQuote.FourtyFiveDegreeLevel = incrementCheckIndex;
+        //            if (incrementCheckIndex == 9)
+        //            {
+        //                currentQuote.IsBullEight45Degreed = true;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            incrementCheckIndex = 1;
+        //        }
+        //    }
+        //}
+
         public override void ApplyBull45DegreeCheck()
         {
             var incrementCheckIndex = 1;
             decimal initialQuotePrice = 0;
 
+
             foreach (var currentQuote in this.Quotes)
             {
+                if (currentQuote.Symbol == "ANDE" && currentQuote.TimeStampDateTime.Day == 11 &&
+                    currentQuote.TimeStampDateTime.Year == 2018 &&
+                    currentQuote.TimeStampDateTime.Month == 4)
+                {
+                    var t = string.Empty;
+                }
                 var currentLow = currentQuote.Low;
 
                 decimal validIncrementPrice = 0;
+                validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0088m) * (incrementCheckIndex - 1);
                 if (currentQuote.IsNewLow)
                 {
-                    initialQuotePrice = currentLow;
+                    //validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0040m) * (incrementCheckIndex - 1);
 
-                    incrementCheckIndex = incrementCheckIndex + 1;
+                    if (currentLow >= validIncrementPrice)
+                    {
+                        incrementCheckIndex = incrementCheckIndex + 1;
+                        currentQuote.FourtyFiveDegreeLevel = incrementCheckIndex;
+                        if (incrementCheckIndex == 9)
+                        {
+                            currentQuote.IsBullEight45Degreed = true;
+                            initialQuotePrice = currentLow;
+                            incrementCheckIndex = 1;
+                        }
+                    }
+                    else
+                    {
+                        incrementCheckIndex = 1;
+                        initialQuotePrice = currentLow;
+                    }
+
+                    
                     continue;
                 }
 
-                if (incrementCheckIndex < 2) continue;
+                //if (incrementCheckIndex < 2) continue;
 
-                validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0035m) * (incrementCheckIndex - 1);
+                //validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0040m) * (incrementCheckIndex - 1);
 
                 if (currentLow >= validIncrementPrice)
                 {
                     incrementCheckIndex = incrementCheckIndex + 1;
                     currentQuote.FourtyFiveDegreeLevel = incrementCheckIndex;
-                    if (incrementCheckIndex == 8)
+                    if (incrementCheckIndex == 9)
                     {
                         currentQuote.IsBullEight45Degreed = true;
+                        initialQuotePrice = currentLow;
+                        incrementCheckIndex = 1;
                     }
                 }
                 else
                 {
                     incrementCheckIndex = 1;
+                    initialQuotePrice = currentLow;
                 }
             }
         }
+
+        //public override void ApplyBull45DegreeCheck()
+        //{
+        //    var initialLow = this.Quotes.First().Low;
+        //    var incrementCheckIndex = 0;
+        //    for (int i = 1; i < this.Quotes.Count; i++)
+        //    {
+        //        var currentLow = this.Quotes[i].Low;
+        //        var validIncrementPrice = initialLow + (initialLow * 0.0040m) * 1;
+
+        //        if (this.Quotes[i].IsNewLow)
+        //        {
+        //            if (currentLow >= validIncrementPrice)
+        //            {
+        //                incrementCheckIndex = incrementCheckIndex + 1;
+        //                this.Quotes[i].FourtyFiveDegreeLevel = incrementCheckIndex;
+
+        //            }
+        //            else
+        //            {
+        //                incrementCheckIndex = 0;
+        //                initialLow = this.Quotes[i].Low;
+        //            }
+        //            continue;
+        //        }
+
+        //        // Need to use the new Low value
+        //        if (currentLow >= validIncrementPrice)
+        //        {
+        //            incrementCheckIndex = incrementCheckIndex + 1;
+        //            this.Quotes[i].FourtyFiveDegreeLevel = incrementCheckIndex;
+        //            if (incrementCheckIndex == 9)
+        //            {
+        //                this.Quotes[i].IsBullEight45Degreed = true;
+        //                incrementCheckIndex = 0;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            incrementCheckIndex = 0;
+        //            initialLow = this.Quotes[i].Low;
+        //        }
+        //    }
+
+        //}
+
+        //public override void ApplyBull45DegreeCheck()
+        //{
+        //    var initialLow = this.Quotes.First().Low;
+        //    var incrementCheckIndex = 0;
+        //    for (int i = 1; i < this.Quotes.Count; i++)
+        //    {
+        //        var currentLow = this.Quotes[i].Low;
+        //        var validIncrementPrice = initialLow + (initialLow * 0.0040m) * 1;
+
+        //        //if (this.Quotes[i].IsNewLow)
+        //        //{
+        //        //    if (currentLow >= validIncrementPrice)
+        //        //    {
+        //        //        incrementCheckIndex = incrementCheckIndex + 1;
+        //        //        this.Quotes[i].FourtyFiveDegreeLevel = incrementCheckIndex;
+
+        //        //    }
+        //        //    else
+        //        //    {
+        //        //        incrementCheckIndex = 0;
+        //        //        initialLow = this.Quotes[i].Low;
+        //        //    }
+        //        //    continue;
+        //        //}
+
+        //        // Need to use the new Low value
+        //        if (currentLow >= validIncrementPrice)
+        //        {
+        //            incrementCheckIndex = incrementCheckIndex + 1;
+        //            this.Quotes[i].FourtyFiveDegreeLevel = incrementCheckIndex;
+        //            if (incrementCheckIndex == 9)
+        //            {
+        //                this.Quotes[i].IsBullEight45Degreed = true;
+        //                incrementCheckIndex = 0;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            incrementCheckIndex = 0;
+        //            initialLow = this.Quotes[i].Low;
+        //        }
+        //    }
+
+        //}
+
 
         public override void ApplySuperGapCheck()
         {
