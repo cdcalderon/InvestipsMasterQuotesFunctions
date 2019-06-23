@@ -588,7 +588,7 @@ namespace InvestipsMasterQuotesFunctions
                         currentQuote.FourtyFiveDegreeLevel = incrementCheckIndex;
                         if (incrementCheckIndex == 9)
                         {
-                            currentQuote.IsBullEight45Degreed = true;
+                            currentQuote.IsBearEight45Degreed = true;
                             initialQuotePrice = currentLow;
                             incrementCheckIndex = 1;
                         }

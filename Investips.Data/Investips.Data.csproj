@@ -76,6 +76,10 @@
     <Compile Include="Migrations\201906222358159_AddIsSuperGapBearProp.Designer.cs">
       <DependentUpon>201906222358159_AddIsSuperGapBearProp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906231022024_AddBearRelatedPropertiesSignals.cs" />
+    <Compile Include="Migrations\201906231022024_AddBearRelatedPropertiesSignals.Designer.cs">
+      <DependentUpon>201906231022024_AddBearRelatedPropertiesSignals.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\InvestipsQuotesContext.cs" />
     <Compile Include="Models\Quote.cs" />
@@ -106,6 +110,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906222358159_AddIsSuperGapBearProp.resx">
       <DependentUpon>201906222358159_AddIsSuperGapBearProp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906231022024_AddBearRelatedPropertiesSignals.resx">
+      <DependentUpon>201906231022024_AddBearRelatedPropertiesSignals.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
