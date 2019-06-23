@@ -35,6 +35,8 @@ namespace InvestipsMasterQuotesFunctions
             builder.ApplyNewLowCheck();
             builder.ApplyBull45DegreeCheck();
             builder.ApplySuperGapCheck();
+            builder.ApplySuperGapBear();
+
 
             builder.ApplySignals();
         }

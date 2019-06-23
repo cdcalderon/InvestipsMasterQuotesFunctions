@@ -566,7 +566,7 @@ namespace InvestipsMasterQuotesFunctions
                 {
                     if (diffBetweenCurrentHighPreviousLow > diffCriteriaAmount || diffBetweenCurrentHighPreviousLow >= diffCriteriaPercent)
                     {
-                        this.Quotes[i].IsSuperGap = true;
+                        this.Quotes[i].IsSuperGapBear = true;
                     }
                 }
 

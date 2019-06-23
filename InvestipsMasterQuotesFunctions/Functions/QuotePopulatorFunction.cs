@@ -29,7 +29,7 @@ namespace InvestipsMasterQuotesFunctions.Functions
             var httpClient = GetHttpClient();
 
             var symbols = await GetStockSymbols(httpClient);
-            var subsetSymbols = symbols.Where(s => s.StartsWith("C") ).ToList();
+            var subsetSymbols = symbols.Where(s => s.StartsWith("AAPL") ).ToList();
             var index = 1;
             foreach (var symbol in subsetSymbols)
             {
@@ -37,15 +37,19 @@ namespace InvestipsMasterQuotesFunctions.Functions
                 //{
                     try
                     {
-                        var history = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2019, 3, 1), DateTime.Now, Period.Daily);
+                        var history = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2015, 3, 1), DateTime.Now,
+                            Period.Daily);
                         quoteMaker.BuildQuote(history, symbol);
                         quotes.AddRange(quoteMaker.GetQuotes());
                         index++;
 
-                        Debug.WriteLine($"------------------------------------------------------------------------------");
-                        Debug.WriteLine($"                       Symbol {symbol} - with index {index}                   ");
-                        Debug.WriteLine($"______________________________________________________________________________");
-                }
+                        Debug.WriteLine(
+                            $"------------------------------------------------------------------------------");
+                        Debug.WriteLine(
+                            $"                       Symbol {symbol} - with index {index}                   ");
+                        Debug.WriteLine(
+                            $"______________________________________________________________________________");
+                    }
                     catch (FlurlHttpException ex)
                     {
                         Debug.WriteLine($"Error fetching  {symbol} quotes ", ex.Message);
@@ -54,21 +58,21 @@ namespace InvestipsMasterQuotesFunctions.Functions
                     {
                         Debug.WriteLine($"Error fetching  {symbol} quotes ", ex.Message);
                     }
-               // }
+              //  }
             }
 
-            using (var db = new InvestipsQuotesContext())
-            {
-                var today = DateTime.Today;
+            //using (var db = new InvestipsQuotesContext())
+            //{
+            //    var today = DateTime.Today;
 
-                var existingSingleQuote = await db.Quotes.Where(q => q.TimeStampDateTime != null && q.Symbol.StartsWith("C")).OrderByDescending(q => q.TimeStampDateTime).FirstOrDefaultAsync();
-                if (existingSingleQuote != null)
-                {
-                    quotes = quotes.Where(q => q.TimeStampDateTime <= today &&
-                                                           q.TimeStampDateTime > existingSingleQuote.TimeStampDateTime).ToList();
-                }
+            //    var existingSingleQuote = await db.Quotes.Where(q => q.TimeStampDateTime != null && q.Symbol.StartsWith("C")).OrderByDescending(q => q.TimeStampDateTime).FirstOrDefaultAsync();
+            //    if (existingSingleQuote != null)
+            //    {
+            //        quotes = quotes.Where(q => q.TimeStampDateTime <= today &&
+            //                                               q.TimeStampDateTime > existingSingleQuote.TimeStampDateTime).ToList();
+            //    }
 
-            }
+            //}
 
 
             using (var db = new InvestipsQuotesContext())
