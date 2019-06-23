@@ -548,6 +548,31 @@ namespace InvestipsMasterQuotesFunctions
             }
         }
 
+        public override void ApplySuperGapBear()
+        {
+            var tenPercent = .10m;
+            for (var i = 1; i < this.Quotes.Count - 1; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+
+                var diffCriteriaAmount = GetDiffAmount(currentQuote.Close);
+                var diffCriteriaPercent = currentQuote.Close * tenPercent;
+
+                var diffBetweenCurrentPreviousClose = previousQuote.Close - currentQuote.Close;
+                var diffBetweenCurrentHighPreviousLow = previousQuote.Low - currentQuote.High;
+
+                if (diffBetweenCurrentPreviousClose > diffCriteriaAmount || diffBetweenCurrentPreviousClose >= diffCriteriaPercent)
+                {
+                    if (diffBetweenCurrentHighPreviousLow > diffCriteriaAmount || diffBetweenCurrentHighPreviousLow >= diffCriteriaPercent)
+                    {
+                        this.Quotes[i].IsSuperGap = true;
+                    }
+                }
+
+            }
+        }
+
         public void ApplyBullStoch307Signal()
         {
             foreach (var quote in this.Quotes)

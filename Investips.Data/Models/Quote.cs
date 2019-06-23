@@ -41,5 +41,6 @@ namespace Investips.Data.Models
 
         public bool IsBullThreeArrow { get; set; }
         public bool IsSuperGap { get; set; }
+        public bool IsSuperGapBear { get; set; }
     }
 }

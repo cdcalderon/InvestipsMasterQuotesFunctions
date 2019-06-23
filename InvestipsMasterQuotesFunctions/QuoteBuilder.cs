@@ -41,6 +41,7 @@ namespace InvestipsMasterQuotesFunctions
         public abstract void ApplyBull45DegreeCheck();
         public abstract void ApplyNewLowCheck();
         public abstract void ApplySuperGapCheck();
+        public abstract void ApplySuperGapBear();
 
     }
 }
