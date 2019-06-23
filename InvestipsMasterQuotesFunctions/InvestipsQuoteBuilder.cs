@@ -127,10 +127,14 @@ namespace InvestipsMasterQuotesFunctions
         {
             ApplyBullStoch307Signal();
             ApplyBearStoch307Signal();
+
             ApplyBullThreeArrowSignal();
             ApplyBearThreeArrowSignal();
-            ApplyBullBigEightSignal();
-            ApplyBearBigEightSignal();
+
+            ApplyBull45DegreeSignal();
+            ApplyBear45DegreeSignal();
+
+            ApplySuperGapBearSignal();
             ApplySuperGapSignal();
         }
 
@@ -150,6 +154,26 @@ namespace InvestipsMasterQuotesFunctions
                 if (currentClose > currentMovingAvg && previousClose < previousMovAvg30)
                 {
                     this.Quotes[i].IsPriceCrossMovAvg30Up = true;
+                }
+            }
+        }
+
+        public override void ApplyPriceCrossingDownMovingAverage30()
+        {
+            // define a small tolerance on our checks to avoid bouncing
+            const decimal tolerance = 0.00015m;
+            for (var i = 1; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var previousClose = previousQuote.Close;
+                var previousMovAvg30 = previousQuote.MovingAvg30;
+                var currentClose = currentQuote.Close;
+                var currentMovingAvg = currentQuote.MovingAvg30;
+
+                if (currentClose < currentMovingAvg && previousClose > previousMovAvg30)
+                {
+                    this.Quotes[i].IsPriceCrossMovAvg30Down = true;
                 }
             }
         }
@@ -175,6 +199,27 @@ namespace InvestipsMasterQuotesFunctions
             }
         }
 
+        public override void ApplyIsMovingAvg30PointingDown()
+        {
+            const decimal tolerance = 0.00015m;
+            for (var i = 30 + 3; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 3];
+                var currentQuote = this.Quotes[i];
+                var currentClose = currentQuote.Close;
+                var currentMovingAvg = currentQuote.MovingAvg30;
+                var previousClose = previousQuote.Close;
+                var previousMovAvg30 = previousQuote.MovingAvg30;
+
+                if (currentMovingAvg < previousMovAvg30)
+                {
+
+                    this.Quotes[i].IsMovingAvg30PointingDown = true;
+                    Debug.WriteLine($"ApplyIsMovingAvg30PointingDown {currentQuote.TimeStampDateTime.ToShortDateString()}");
+                }
+            }
+        }
+
         public override void ApplyIsStochMovingUp()
         {
             const decimal tolerance = 0.00015m;
@@ -190,6 +235,25 @@ namespace InvestipsMasterQuotesFunctions
 
                     this.Quotes[i].IsStoch14505PointingUp = true;
                     Debug.WriteLine($"ApplyIsStoch14505PointingUp {currentQuote.TimeStampDateTime.ToShortDateString()}");
+                }
+            }
+        }
+
+        public override void ApplyIsStochMovingDown()
+        {
+            const decimal tolerance = 0.00015m;
+            for (var i = 30; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var currentStoch14505 = currentQuote.Stochastics14505;
+                var previousStoch14505 = previousQuote.Stochastics14505;
+
+                if (currentStoch14505 < previousStoch14505)
+                {
+
+                    this.Quotes[i].IsStoch14505PointingDown = true;
+                    Debug.WriteLine($"ApplyIsStoch14505PointingDown {currentQuote.TimeStampDateTime.ToShortDateString()}");
                 }
             }
         }
@@ -214,6 +278,26 @@ namespace InvestipsMasterQuotesFunctions
             }
         }
 
+        public override void ApplyPriceCrossingDownMovingAverage7()
+        {
+            // define a small tolerance on our checks to avoid bouncing
+            const decimal tolerance = 0.00015m;
+            for (var i = 7 + 1; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var previousClose = previousQuote.Close;
+                var previousMovAvg7 = previousQuote.MovingAvg7;
+                var currentClose = currentQuote.Close;
+                var currentMovingAvg7 = currentQuote.MovingAvg7;
+
+                if (currentClose < currentMovingAvg7 && previousClose > previousMovAvg7)
+                {
+                    this.Quotes[i].IsPriceCrossMovAvg7Down = true;
+                }
+            }
+        }
+
         public override void ApplyStochasticCrossingUp25()
         {
             for (var i = 1; i < this.Quotes.Count; i++)
@@ -226,6 +310,22 @@ namespace InvestipsMasterQuotesFunctions
                 if (currentStoch14505 > 25 && previousStoch14505 < 25)
                 {
                     this.Quotes[i].IsStoch145Cossing25Up = true;
+                }
+            }
+        }
+
+        public override void ApplyStochasticCrossingDown75()
+        {
+            for (var i = 1; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var previousStoch14505 = previousQuote.Stochastics14505;
+                var currentStoch14505 = currentQuote.Stochastics14505;
+
+                if (currentStoch14505 > 25 && previousStoch14505 < 25)
+                {
+                    this.Quotes[i].IsStoch145Cossing75Down = true;
                 }
             }
         }
@@ -247,6 +347,23 @@ namespace InvestipsMasterQuotesFunctions
             }
         }
 
+        public override void ApplyStochasticCrossingDown80()
+        {
+            for (var i = 1; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var previousStoch101 = previousQuote.Stochastics101;
+                var currentStoch101 = currentQuote.Stochastics101;
+
+                if (currentStoch101 < 80 && previousStoch101 > 80)
+                {
+                    this.Quotes[i].IsStoch101Cossing80Down = true;
+                    Debug.WriteLine($"ApplyStochasticCrossingDown80 {currentQuote.TimeStampDateTime.ToShortDateString()}");
+                }
+            }
+        }
+
         public override void ApplyMacdCrossingHorizontalUp()
         {
             for (var i = 1; i < this.Quotes.Count; i++)
@@ -259,6 +376,22 @@ namespace InvestipsMasterQuotesFunctions
                 if (currentMacd8179 > 0 && previousMacd8179 <= 0)
                 {
                     this.Quotes[i].IsMacdCrossingHorizontalUp = true;
+                }
+            }
+        }
+
+        public override void ApplyMacdCrossingHorizontalDown()
+        {
+            for (var i = 1; i < this.Quotes.Count; i++)
+            {
+                var previousQuote = this.Quotes[i - 1];
+                var currentQuote = this.Quotes[i];
+                var previousMacd8179 = previousQuote.Macd8179;
+                var currentMacd8179 = currentQuote.Macd8179;
+
+                if (currentMacd8179 < 0 && previousMacd8179 >= 0)
+                {
+                    this.Quotes[i].IsMacdCrossingHorizontalDown = true;
                 }
             }
         }
@@ -361,7 +494,7 @@ namespace InvestipsMasterQuotesFunctions
         //    }
         //}
 
-        public override void ApplyBull45DegreeCheck()
+        private void ApplyBull45DegreeSignal()
         {
             var incrementCheckIndex = 1;
             decimal initialQuotePrice = 0;
@@ -415,6 +548,72 @@ namespace InvestipsMasterQuotesFunctions
                     if (incrementCheckIndex == 9)
                     {
                         currentQuote.IsBullEight45Degreed = true;
+                        initialQuotePrice = currentLow;
+                        incrementCheckIndex = 1;
+                    }
+                }
+                else
+                {
+                    incrementCheckIndex = 1;
+                    initialQuotePrice = currentLow;
+                }
+            }
+        }
+
+        public void ApplyBear45DegreeSignal()
+        {
+            var incrementCheckIndex = 1;
+            decimal initialQuotePrice = 0;
+
+
+            foreach (var currentQuote in this.Quotes)
+            {
+                if (currentQuote.Symbol == "ANDE" && currentQuote.TimeStampDateTime.Day == 11 &&
+                    currentQuote.TimeStampDateTime.Year == 2018 &&
+                    currentQuote.TimeStampDateTime.Month == 4)
+                {
+                    var t = string.Empty;
+                }
+                var currentLow = currentQuote.Low;
+
+                decimal validIncrementPrice = 0;
+                validIncrementPrice = initialQuotePrice - (initialQuotePrice * 0.0088m) * (incrementCheckIndex - 1);
+                if (currentQuote.IsNewLow)
+                {
+                    //validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0040m) * (incrementCheckIndex - 1);
+
+                    if (currentLow >= validIncrementPrice)
+                    {
+                        incrementCheckIndex = incrementCheckIndex + 1;
+                        currentQuote.FourtyFiveDegreeLevel = incrementCheckIndex;
+                        if (incrementCheckIndex == 9)
+                        {
+                            currentQuote.IsBullEight45Degreed = true;
+                            initialQuotePrice = currentLow;
+                            incrementCheckIndex = 1;
+                        }
+                    }
+                    else
+                    {
+                        incrementCheckIndex = 1;
+                        initialQuotePrice = currentLow;
+                    }
+
+
+                    continue;
+                }
+
+                //if (incrementCheckIndex < 2) continue;
+
+                //validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0040m) * (incrementCheckIndex - 1);
+
+                if (currentLow >= validIncrementPrice)
+                {
+                    incrementCheckIndex = incrementCheckIndex + 1;
+                    currentQuote.FourtyFiveDegreeLevel = incrementCheckIndex;
+                    if (incrementCheckIndex == 9)
+                    {
+                        currentQuote.IsBearEight45Degreed = true;
                         initialQuotePrice = currentLow;
                         incrementCheckIndex = 1;
                     }
@@ -518,7 +717,7 @@ namespace InvestipsMasterQuotesFunctions
         //}
 
 
-        public override void ApplySuperGapCheck()
+        public void ApplySuperGapSignal()
         {
             var tenPercent = .10m;
             for (var i = 1; i < this.Quotes.Count - 1; i++)
@@ -548,7 +747,7 @@ namespace InvestipsMasterQuotesFunctions
             }
         }
 
-        public override void ApplySuperGapBear()
+        public void ApplySuperGapBearSignal()
         {
             var tenPercent = .10m;
             for (var i = 1; i < this.Quotes.Count - 1; i++)
@@ -583,14 +782,24 @@ namespace InvestipsMasterQuotesFunctions
                 )
                 {
                     Debug.WriteLine($"ApplyBullStoch307Signal {quote.TimeStampDateTime.ToShortDateString()}");
-                    quote.IsBullThreeArrow = true;
+                    quote.IsBullStoch307 = true;
                 }
             }
         }
 
         public void ApplyBearStoch307Signal()
         {
-
+            foreach (var quote in this.Quotes)
+            {
+                if (quote.IsPriceCrossMovAvg7Down &&
+                    quote.IsStoch101Cossing80Down &&
+                    quote.IsMovingAvg30PointingDown
+                )
+                {
+                    Debug.WriteLine($"ApplyBearStoch307Signal {quote.TimeStampDateTime.ToShortDateString()}");
+                    quote.IsBearStoch307 = true;
+                }
+            }
         }
 
         public void ApplyBullThreeArrowSignal()
@@ -623,23 +832,31 @@ namespace InvestipsMasterQuotesFunctions
         private void ApplyBearThreeArrowSignal()
         {
 
+            var movAvg30Check = false;
+            var macdCheck = false;
+            var stochasticsCheck = false;
+
+            foreach (var quote in this.Quotes)
+            {
+                movAvg30Check = quote.IsPriceCrossMovAvg30Down || movAvg30Check;
+                macdCheck = quote.IsMacdCrossingHorizontalDown || macdCheck;
+                stochasticsCheck = quote.IsStoch145Cossing75Down || stochasticsCheck;
+
+                if (movAvg30Check && macdCheck && stochasticsCheck &&
+                    (quote.Close < quote.MovingAvg30) &&
+                    (quote.Stochastics14505 < 75) &&
+                    (quote.Macd8179 < 0)
+                )
+                {
+                    Debug.WriteLine($"{quote.TimeStampDateTime.ToShortDateString()}");
+                    quote.IsBearThreeArrow = true;
+                    movAvg30Check = false;
+                    macdCheck = false;
+                    stochasticsCheck = false;
+                }
+            }
         }
-
-        private void ApplySuperGapSignal()
-        {
-
-        }
-
-        private void ApplyBearBigEightSignal()
-        {
-
-        }
-
-        private void ApplyBullBigEightSignal()
-        {
-
-        }
-
+        
         private void MergeMvgAvg(MovingAvgInfo movingAvgInfo)
         {
             for (int i = 0; i < movingAvgInfo.EndIndex; i++)

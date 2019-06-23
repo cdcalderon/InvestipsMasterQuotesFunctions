@@ -26,17 +26,20 @@ namespace InvestipsMasterQuotesFunctions
             builder.ApplyStochatics101();
             builder.ApplyMacds();
             builder.ApplyPriceCrossingUpMovingAverage30();
+            builder.ApplyPriceCrossingDownMovingAverage30();
             builder.ApplyPriceCrossingUpMovingAverage7();
+            builder.ApplyPriceCrossingDownMovingAverage7();
             builder.ApplyStochasticCrossingUp25();
+            builder.ApplyStochasticCrossingDown75();
             builder.ApplyStochasticCrossingUp20();
+            builder.ApplyStochasticCrossingDown80();
             builder.ApplyMacdCrossingHorizontalUp();
+            builder.ApplyMacdCrossingHorizontalDown();
             builder.ApplyIsMovingAvg30PointingUp();
+            builder.ApplyIsMovingAvg30PointingDown();
             builder.ApplyIsStochMovingUp();
+            builder.ApplyIsStochMovingDown();
             builder.ApplyNewLowCheck();
-            builder.ApplyBull45DegreeCheck();
-            builder.ApplySuperGapCheck();
-            builder.ApplySuperGapBear();
-
 
             builder.ApplySignals();
         }

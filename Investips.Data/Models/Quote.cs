@@ -29,18 +29,33 @@ namespace Investips.Data.Models
         public decimal? Stochastics14505 { get; set; }
         public decimal? Stochastics101 { get; set; }
         public bool IsPriceCrossMovAvg30Up { get; set; }
+        public bool IsPriceCrossMovAvg30Down { get; set; }
         public bool IsPriceCrossMovAvg7Up { get; set; }
+        public bool IsPriceCrossMovAvg7Down { get; set; }
         public bool IsStoch145Cossing25Up { get; set; }
+        public bool IsStoch145Cossing75Down { get; set; }
         public bool IsStoch101Cossing20Up { get; set; }
+        public bool IsStoch101Cossing80Down { get; set; }
         public bool IsMacdCrossingHorizontalUp { get; set; }
+        public bool IsMacdCrossingHorizontalDown { get; set; }
         public bool IsMovingAvg30PointingUp { get; set; }
+        public bool IsMovingAvg30PointingDown { get; set; }
         public bool IsStoch14505PointingUp { get; set; }
+        public bool IsStoch14505PointingDown { get; set; }
         public bool IsNewLow { get; set; }
         public bool IsBullEight45Degreed { get; set; }
+        public bool IsBearEight45Degreed { get; set; }
         public int FourtyFiveDegreeLevel { get; set; }
 
         public bool IsBullThreeArrow { get; set; }
+        public bool IsBearThreeArrow { get; set; }
+        public bool IsBullStoch307 { get; set; }
+        public bool IsBearStoch307 { get; set; }
         public bool IsSuperGap { get; set; }
         public bool IsSuperGapBear { get; set; }
+
+        
+
+
     }
 }

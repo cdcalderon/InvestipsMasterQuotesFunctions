@@ -32,16 +32,20 @@ namespace InvestipsMasterQuotesFunctions
         public abstract void ApplyStochatics101();
         public abstract void ApplySignals();
         public abstract void ApplyPriceCrossingUpMovingAverage30();
+        public abstract void ApplyPriceCrossingDownMovingAverage30();
         public abstract void ApplyPriceCrossingUpMovingAverage7();
+        public abstract void ApplyPriceCrossingDownMovingAverage7();
         public abstract void ApplyStochasticCrossingUp25();
+        public abstract void ApplyStochasticCrossingDown75();
         public abstract void ApplyStochasticCrossingUp20();
+        public abstract void ApplyStochasticCrossingDown80();
         public abstract void ApplyMacdCrossingHorizontalUp();
+        public abstract void ApplyMacdCrossingHorizontalDown();
         public abstract void ApplyIsMovingAvg30PointingUp();
+        public abstract void ApplyIsMovingAvg30PointingDown();
         public abstract void ApplyIsStochMovingUp();
-        public abstract void ApplyBull45DegreeCheck();
+        public abstract void ApplyIsStochMovingDown();
         public abstract void ApplyNewLowCheck();
-        public abstract void ApplySuperGapCheck();
-        public abstract void ApplySuperGapBear();
-
+       
     }
 }
