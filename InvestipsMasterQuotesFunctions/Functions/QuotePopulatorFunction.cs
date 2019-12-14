@@ -29,15 +29,16 @@ namespace InvestipsMasterQuotesFunctions.Functions
             var httpClient = GetHttpClient();
 
             var symbols = await GetStockSymbols(httpClient);
-            var subsetSymbols = symbols.Where(s => s.StartsWith("AAPL") ).ToList();
+            //var subsetSymbols = symbols.Where(s => s.StartsWith("S") || s.StartsWith("T") || s.StartsWith("U") || s.StartsWith("V") || s.StartsWith("W")
+            //                                       || s.StartsWith("X") || s.StartsWith("Y") || s.StartsWith("Z")).ToList();
             var index = 1;
-            foreach (var symbol in subsetSymbols)
+            foreach (var symbol in symbols)
             {
                 //if (index < 3)
                 //{
                     try
                     {
-                        var history = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2015, 3, 1), DateTime.Now,
+                        var history = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2019, 3, 1), DateTime.Now,
                             Period.Daily);
                         quoteMaker.BuildQuote(history, symbol);
                         quotes.AddRange(quoteMaker.GetQuotes());
@@ -61,18 +62,18 @@ namespace InvestipsMasterQuotesFunctions.Functions
               //  }
             }
 
-            //using (var db = new InvestipsQuotesContext())
-            //{
-            //    var today = DateTime.Today;
+            using (var db = new InvestipsQuotesContext())
+            {
+                var today = DateTime.Today;
 
-            //    var existingSingleQuote = await db.Quotes.Where(q => q.TimeStampDateTime != null && q.Symbol.StartsWith("C")).OrderByDescending(q => q.TimeStampDateTime).FirstOrDefaultAsync();
-            //    if (existingSingleQuote != null)
-            //    {
-            //        quotes = quotes.Where(q => q.TimeStampDateTime <= today &&
-            //                                               q.TimeStampDateTime > existingSingleQuote.TimeStampDateTime).ToList();
-            //    }
+                var existingSingleQuote = await db.Quotes.Where(q => q.TimeStampDateTime != null && q.Symbol.StartsWith("C")).OrderByDescending(q => q.TimeStampDateTime).FirstOrDefaultAsync();
+                if (existingSingleQuote != null)
+                {
+                    quotes = quotes.Where(q => q.TimeStampDateTime <= today &&
+                                                           q.TimeStampDateTime > existingSingleQuote.TimeStampDateTime).ToList();
+                }
 
-            //}
+            }
 
 
             using (var db = new InvestipsQuotesContext())

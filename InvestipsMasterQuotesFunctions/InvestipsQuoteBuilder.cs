@@ -43,7 +43,8 @@ namespace InvestipsMasterQuotesFunctions
                 var resultState = TicTacTec.TA.Library.Core.MovingAverage(
                     0,
                     closePrices.Length - 1,
-                    closePrices, period,
+                    closePrices, 
+                    period,
                     Core.MAType.Ema,
                     out var outBegIndex,
                     out var outNbElement,
@@ -61,6 +62,57 @@ namespace InvestipsMasterQuotesFunctions
             }
         }
 
+        public override void ApplyCandleDoji()
+        {
+            var closePrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Close)).ToArray();
+            var highPrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.High)).ToArray();
+            var lowPrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Low)).ToArray();
+            var openPrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Open)).ToArray();
+            var outDojis = new int[closePrices.Length];
+
+            //var tt = TicTacTec.TA.Library.Core.CdlEngulfing(
+            //    0,
+            //    closePrices.Length - 1,
+            //    openPrices,
+            //    highPrices,
+            //    lowPrices,
+            //    closePrices,
+            //    out var outBegIndex,
+            //    out var outNbElement,
+            //    outDojis);
+
+            //var tt = TicTacTec.TA.Library.Core.CdlDarkCloudCover(
+            //    0,
+            //    closePrices.Length - 1,
+            //    openPrices,
+            //    highPrices,
+            //    lowPrices,
+            //    closePrices,
+            //    .50,
+            //    out var outBegIndex,
+            //    out var outNbElement,
+            //    outDojis);
+
+            var tt = TicTacTec.TA.Library.Core.CdlEveningStar(
+                0,
+                closePrices.Length - 1,
+                openPrices,
+                highPrices,
+                lowPrices,
+                closePrices,
+                .50,
+                out var outBegIndex,
+                out var outNbElement,
+                outDojis);
+
+            for (int i = 0; i < outNbElement; i++)
+            {
+                this.Quotes[outBegIndex + i].IsDoji = outDojis[i] > 0 || outDojis[i] < 0 ? true: false;
+            }
+
+            
+        }
+        
         public override void ApplyMacds()
         {
             var closePrices = this.QuoteCandles.Select(x => Convert.ToSingle(x.Close)).ToArray();
@@ -323,7 +375,7 @@ namespace InvestipsMasterQuotesFunctions
                 var previousStoch14505 = previousQuote.Stochastics14505;
                 var currentStoch14505 = currentQuote.Stochastics14505;
 
-                if (currentStoch14505 > 25 && previousStoch14505 < 25)
+                if (currentStoch14505 < 75 && previousStoch14505 > 75)
                 {
                     this.Quotes[i].IsStoch145Cossing75Down = true;
                 }
@@ -577,12 +629,12 @@ namespace InvestipsMasterQuotesFunctions
                 var currentLow = currentQuote.Low;
 
                 decimal validIncrementPrice = 0;
-                validIncrementPrice = initialQuotePrice - (initialQuotePrice * 0.0088m) * (incrementCheckIndex - 1);
+                validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0088m) * (incrementCheckIndex - 1);
                 if (currentQuote.IsNewLow)
                 {
                     //validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0040m) * (incrementCheckIndex - 1);
 
-                    if (currentLow >= validIncrementPrice)
+                    if (currentLow <= validIncrementPrice)
                     {
                         incrementCheckIndex = incrementCheckIndex + 1;
                         currentQuote.FourtyFiveDegreeLevel = incrementCheckIndex;
@@ -607,7 +659,7 @@ namespace InvestipsMasterQuotesFunctions
 
                 //validIncrementPrice = initialQuotePrice + (initialQuotePrice * 0.0040m) * (incrementCheckIndex - 1);
 
-                if (currentLow >= validIncrementPrice)
+                if (currentLow <= validIncrementPrice)
                 {
                     incrementCheckIndex = incrementCheckIndex + 1;
                     currentQuote.FourtyFiveDegreeLevel = incrementCheckIndex;
@@ -810,9 +862,9 @@ namespace InvestipsMasterQuotesFunctions
 
             foreach (var quote in this.Quotes)
             {
-                movAvg30Check = quote.IsPriceCrossMovAvg30Up || movAvg30Check;
-                macdCheck = quote.IsMacdCrossingHorizontalUp || macdCheck;
-                stochasticsCheck = quote.IsStoch145Cossing25Up || stochasticsCheck;
+                movAvg30Check = quote.IsPriceCrossMovAvg30Up;
+                macdCheck = quote.IsMacdCrossingHorizontalUp;
+                stochasticsCheck = quote.IsStoch145Cossing25Up;
 
                 if (movAvg30Check && macdCheck && stochasticsCheck && 
                     (quote.Close > quote.MovingAvg30) &&
@@ -838,9 +890,9 @@ namespace InvestipsMasterQuotesFunctions
 
             foreach (var quote in this.Quotes)
             {
-                movAvg30Check = quote.IsPriceCrossMovAvg30Down || movAvg30Check;
-                macdCheck = quote.IsMacdCrossingHorizontalDown || macdCheck;
-                stochasticsCheck = quote.IsStoch145Cossing75Down || stochasticsCheck;
+                movAvg30Check = quote.IsPriceCrossMovAvg30Down;
+                macdCheck = quote.IsMacdCrossingHorizontalDown;
+                stochasticsCheck = quote.IsStoch145Cossing75Down;
 
                 if (movAvg30Check && macdCheck && stochasticsCheck &&
                     (quote.Close < quote.MovingAvg30) &&

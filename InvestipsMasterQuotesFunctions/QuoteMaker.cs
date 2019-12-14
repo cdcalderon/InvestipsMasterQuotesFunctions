@@ -22,6 +22,7 @@ namespace InvestipsMasterQuotesFunctions
             builder.CreateNewQuote(candleQuotes, symbol);
             builder.ApplyCandleBarQuote();
             builder.ApplyMovingAverages();
+           // builder.ApplyCandleDoji();
             builder.ApplyStochatics1405();
             builder.ApplyStochatics101();
             builder.ApplyMacds();

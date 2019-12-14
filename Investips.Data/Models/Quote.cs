@@ -54,8 +54,7 @@ namespace Investips.Data.Models
         public bool IsSuperGap { get; set; }
         public bool IsSuperGapBear { get; set; }
 
-        
 
-
+        public bool IsDoji { get; set; }
     }
 }

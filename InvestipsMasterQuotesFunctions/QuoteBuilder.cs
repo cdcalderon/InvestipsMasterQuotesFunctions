@@ -27,6 +27,7 @@ namespace InvestipsMasterQuotesFunctions
 
         public abstract void ApplyCandleBarQuote();
         public abstract void ApplyMovingAverages();
+        public abstract void ApplyCandleDoji();
         public abstract void ApplyMacds();
         public abstract void ApplyStochatics1405();
         public abstract void ApplyStochatics101();
